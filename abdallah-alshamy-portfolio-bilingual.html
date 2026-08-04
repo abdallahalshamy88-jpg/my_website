@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Abdallah Al-shamy — Motion Designer &amp; Video Editor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  @font-face{
+    font-family:'Thmanyah Sans';
+    src:url('./fonts/thmanyahsans-Regular.otf') format('opentype');
+    font-weight:400;
+    font-style:normal;
+    font-display:swap;
+  }
+  @font-face{
+    font-family:'Thmanyah Sans';
+    src:url('./fonts/thmanyahsans-Medium.otf') format('opentype');
+    font-weight:500 600;
+    font-style:normal;
+    font-display:swap;
+  }
+  @font-face{
+    font-family:'Thmanyah Sans';
+    src:url('./fonts/thmanyahsans-Bold.otf') format('opentype');
+    font-weight:700;
+    font-style:normal;
+    font-display:swap;
+  }
+  :root{
+    --bg:#15171a;
+    --panel:#1c1f22;
+    --panel-2:#22262a;
+    --line:#2b2f33;
+    --text:#eef0f1;
+    --muted:#8b939b;
+    --orange:#ff7a45;
+    --teal:#2fd6c4;
+    --orange-dim: rgba(255,122,69,0.14);
+    --teal-dim: rgba(47,214,196,0.14);
+    --radius:2px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Space Grotesk', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--orange); color:#15171a; }
+
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+  .display{ font-family:'Bebas Neue', sans-serif; letter-spacing:0.01em; }
+
+  a{ color:inherit; }
+
+  /* ---------- Timeline scrubber (signature element) ---------- */
+  #scrubber{
+    position:sticky; top:0; z-index:100;
+    background:rgba(21,23,26,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .scrub-inner{
+    max-width:1100px; margin:0 auto; padding:10px 24px 12px;
+    display:flex; align-items:center; gap:16px;
+  }
+  .scrub-brand{
+    font-size:13px; letter-spacing:0.08em; color:var(--muted); white-space:nowrap;
+  }
+  .scrub-track{
+    position:relative; flex:1; height:26px;
+  }
+  .scrub-rule{
+    position:absolute; left:0; right:0; top:12px; height:1px; background:var(--line);
+  }
+  .scrub-tick{
+    position:absolute; top:0; width:auto; text-align:center; transform:translateX(-50%);
+    cursor:pointer; background:none; border:none; padding:0; color:var(--muted);
+    font-family:'IBM Plex Mono', monospace; font-size:10px; display:flex; flex-direction:column; align-items:center; gap:4px;
+  }
+  .scrub-tick .kf{
+    width:7px; height:7px; background:var(--panel-2); border:1px solid var(--muted);
+    transform:rotate(45deg); transition:background .2s, border-color .2s;
+  }
+  .scrub-tick.active .kf{ background:var(--orange); border-color:var(--orange); }
+  .scrub-tick.active{ color:var(--orange); }
+  .scrub-tick span{ margin-top:2px; }
+  .scrub-playhead{
+    position:absolute; top:6px; width:2px; height:14px; background:var(--teal);
+    transition:left .08s linear; box-shadow:0 0 8px var(--teal);
+  }
+  .scrub-tc{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--teal);
+    min-width:78px; text-align:right;
+  }
+  .lang-toggle{
+    border:1px solid var(--line);
+    background:var(--panel);
+    color:var(--text);
+    border-radius:var(--radius);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    padding:8px 10px;
+    cursor:pointer;
+    transition:border-color .15s, color .15s;
+    white-space:nowrap;
+  }
+  .lang-toggle:hover{ border-color:var(--orange); color:var(--orange); }
+
+  /* ---------- Layout helpers ---------- */
+  section{ max-width:1100px; margin:0 auto; padding:96px 24px; border-bottom:1px solid var(--line); }
+  section:last-of-type{ border-bottom:none; }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--teal);
+    letter-spacing:0.12em; text-transform:uppercase; margin-bottom:14px; display:block;
+  }
+  h2.title{
+    font-family:'Bebas Neue', sans-serif; font-size:clamp(32px,5vw,52px);
+    margin:0 0 40px; letter-spacing:0.01em;
+  }
+
+  /* ---------- Hero ---------- */
+  #hero{ padding-top:70px; padding-bottom:80px; }
+  .hero-tc-row{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--muted);
+    margin-bottom:28px; letter-spacing:0.05em;
+  }
+  .hero-tc-row .rec{
+    display:inline-flex; align-items:center; gap:6px; color:var(--orange);
+  }
+  .rec-dot{ width:7px; height:7px; border-radius:50%; background:var(--orange); animation:pulse 1.6s infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.25;} }
+
+  .hero-title{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:clamp(56px,11vw,132px);
+    line-height:0.92; margin:0; overflow:hidden;
+  }
+  .hero-title .line{ display:block; overflow:hidden; }
+  .hero-title .line span{
+    display:block; transform:translateY(110%);
+    animation:reveal 0.9s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  .hero-title .line:nth-child(2) span{ animation-delay:0.12s; color:var(--orange); }
+  @keyframes reveal{ to{ transform:translateY(0); } }
+
+  .hero-role{
+    font-size:clamp(16px,2vw,20px); color:var(--muted); margin:26px 0 30px; max-width:560px;
+  }
+  .hero-role b{ color:var(--text); font-weight:600; }
+
+  .hero-cta{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; letter-spacing:0.04em;
+    padding:13px 22px; border-radius:var(--radius); text-decoration:none;
+    display:inline-flex; align-items:center; gap:8px; transition:transform .15s, background .15s;
+  }
+  .btn-primary{ background:var(--orange); color:#15171a; font-weight:600; }
+  .btn-primary:hover{ transform:translateY(-2px); }
+  .btn-ghost{ border:1px solid var(--line); color:var(--text); }
+  .btn-ghost:hover{ border-color:var(--teal); color:var(--teal); }
+
+  /* waveform decoration */
+  .wave{ display:flex; align-items:flex-end; gap:3px; height:36px; margin-top:56px; opacity:0.8; }
+  .wave i{
+    display:block; width:3px; background:var(--line); border-radius:1px;
+    animation:bounce 2.4s ease-in-out infinite;
+  }
+  @keyframes bounce{ 0%,100%{ transform:scaleY(0.3);} 50%{ transform:scaleY(1);} }
+
+  /* ---------- Skills as tracks ---------- */
+  .track-row{ display:flex; border-top:1px solid var(--line); }
+  .track-row:last-child{ border-bottom:1px solid var(--line); }
+  .track-label{
+    width:96px; flex-shrink:0; padding:16px 10px 16px 0;
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--muted);
+  }
+  .track-label b{ color:var(--text); display:block; font-size:13px; margin-bottom:2px;}
+  .track-lane{
+    flex:1; display:flex; flex-wrap:wrap; gap:8px; padding:14px 0; align-items:center;
+  }
+  .clip{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px;
+    padding:7px 12px; border-radius:var(--radius);
+    background:var(--panel); border:1px solid var(--line);
+    transition:border-color .15s, transform .15s;
+  }
+  .clip:hover{ transform:translateY(-2px); }
+  .track-row:nth-child(1) .clip:hover{ border-color:var(--orange); }
+  .track-row:nth-child(2) .clip:hover{ border-color:var(--teal); }
+  .track-row:nth-child(3) .clip:hover{ border-color:#c99bff; }
+  .track-row:nth-child(4) .clip:hover{ border-color:#ffd166; }
+
+  /* ---------- Experience keyframes ---------- */
+  .kf-line{ position:relative; margin-top:20px; }
+  .kf-line svg{ display:block; width:100%; height:60px; }
+  .kf-item{
+    position:relative; padding:0 0 56px 0; border-left:1px solid var(--line);
+    margin-left:9px; padding-left:34px;
+  }
+  .kf-item:last-child{ padding-bottom:0; }
+  .kf-diamond{
+    position:absolute; left:-6px; top:2px; width:11px; height:11px;
+    background:var(--panel); border:2px solid var(--orange); transform:rotate(45deg);
+  }
+  .kf-time{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--teal); margin-bottom:6px; display:block;}
+  .kf-role{ font-size:19px; font-weight:600; margin:0 0 3px; }
+  .kf-org{ color:var(--muted); font-size:14px; margin:0 0 12px; }
+  .kf-notes{ margin:0; padding:0; list-style:none; }
+  .kf-notes li{
+    font-size:14.5px; color:#c7cbcf; padding-left:16px; position:relative; margin-bottom:6px; line-height:1.5;
+  }
+  .kf-notes li::before{ content:"—"; position:absolute; left:0; color:var(--muted); }
+
+  /* ---------- Video work ---------- */
+  #videos[hidden]{ display:none; }
+  #videos{ padding-top:24px; }
+  #videos .eyebrow,
+  #videos .title{ display:none; }
+  .video-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
+  .video-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    overflow:hidden; position:relative;
+  }
+  .video-frame{
+    aspect-ratio:16/9; background:#0d0f11;
+  }
+  .video-frame video,
+  .video-frame iframe{
+    display:block; width:100%; height:100%; border:0; background:#0d0f11;
+  }
+  /* ---------- Reel / courses as filmstrip ---------- */
+  .reel-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .reel-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px 20px; position:relative; overflow:hidden;
+  }
+  .reel-card::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:3px;
+    background:repeating-linear-gradient(90deg,var(--line) 0 8px, transparent 8px 14px);
+  }
+  .reel-year{ font-family:'IBM Plex Mono', monospace; color:var(--orange); font-size:12px; letter-spacing:0.06em; }
+  .reel-name{ font-size:17px; font-weight:600; margin:10px 0 4px; }
+  .reel-org{ color:var(--muted); font-size:13px; margin:0 0 12px; }
+  .reel-desc{ font-size:13.5px; color:#c7cbcf; line-height:1.5; margin:0; }
+
+  /* ---------- Education ---------- */
+  .edu-box{
+    display:flex; justify-content:space-between; align-items:flex-start; gap:20px;
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:24px 26px; flex-wrap:wrap;
+  }
+  .edu-box .kf-time{ margin-bottom:8px; }
+
+  /* ---------- Contact / export panel ---------- */
+  #contact{ padding-bottom:110px; }
+  .export-panel{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:32px; 
+  }
+  .export-head{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--muted);
+    border-bottom:1px solid var(--line); padding-bottom:16px; margin-bottom:22px;
+  }
+  .export-head .dots{ display:flex; gap:6px; }
+  .export-head .dots i{ width:8px; height:8px; border-radius:50%; background:var(--line); }
+  .export-row{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:12px 0; border-bottom:1px solid var(--line);
+    font-size:14px;
+  }
+  .export-row:last-of-type{ border-bottom:none; }
+  .export-row .k{ color:var(--muted); font-family:'IBM Plex Mono', monospace; font-size:12.5px; }
+  .export-row .v a{ text-decoration:none; color:var(--text); border-bottom:1px dotted var(--muted); }
+  .export-row .v a:hover{ color:var(--teal); border-color:var(--teal); }
+  .export-go{
+    margin-top:24px; width:100%; background:var(--orange); color:#15171a; border:none;
+    font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:14px; letter-spacing:0.04em;
+    padding:16px; border-radius:var(--radius); cursor:pointer; transition:transform .15s;
+  }
+  .export-go:hover{ transform:translateY(-2px); }
+
+  footer{
+    text-align:center; padding:30px 24px 50px; font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px; color:var(--muted);
+  }
+
+  /* reveal-on-scroll */
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  @media (max-width:760px){
+    .video-grid{ grid-template-columns:1fr; }
+    .reel-grid{ grid-template-columns:1fr; }
+    .track-row{ flex-direction:column; }
+    .track-label{ width:auto; padding-bottom:6px; }
+    .scrub-tick span{ display:none; }
+    .scrub-inner{ gap:10px; padding-inline:16px; }
+    .scrub-brand{ display:none; }
+    section{ padding:64px 20px; }
+    .export-row{ flex-direction:column; align-items:flex-start; gap:4px; }
+  }
+
+  body.ar{
+    direction:rtl;
+    font-family:'Thmanyah Sans', Tahoma, Arial, sans-serif;
+  }
+  body.ar .display,
+  body.ar h2.title,
+  body.ar .hero-title{
+    font-family:'Thmanyah Sans', Tahoma, Arial, sans-serif;
+    letter-spacing:0;
+  }
+  body.ar .hero-title{
+    line-height:1.08;
+    overflow:visible;
+  }
+  body.ar .hero-title .line{ overflow:visible; }
+  body.ar .mono,
+  body.ar .eyebrow,
+  body.ar .hero-tc-row,
+  body.ar .scrub-tick,
+  body.ar .scrub-tc,
+  body.ar .btn,
+  body.ar .track-label,
+  body.ar .clip,
+  body.ar .kf-time,
+  body.ar .reel-year,
+  body.ar .export-head,
+  body.ar .export-row .k,
+  body.ar footer,
+  body.ar .lang-toggle{
+    font-family:'Thmanyah Sans', Tahoma, Arial, sans-serif;
+    letter-spacing:0;
+  }
+  body.ar .scrub-tick{ transform:translateX(50%); }
+  body.ar .scrub-tc{ text-align:left; }
+  body.ar .kf-item{
+    border-left:none;
+    border-right:1px solid var(--line);
+    margin-left:0;
+    margin-right:9px;
+    padding-left:0;
+    padding-right:34px;
+  }
+  body.ar .kf-diamond{ left:auto; right:-6px; }
+  body.ar .kf-notes li{ padding-left:0; padding-right:16px; }
+  body.ar .kf-notes li::before{ left:auto; right:0; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="scrubber">
+  <div class="scrub-inner">
+    <span class="scrub-brand mono">A.SHAMY</span>
+    <div class="scrub-track" id="scrubTrack">
+      <div class="scrub-rule"></div>
+      <div class="scrub-playhead" id="playhead"></div>
+      <!-- ticks injected by JS -->
+    </div>
+    <span class="scrub-tc" id="tcDisplay">00:00:00:00</span>
+    <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch language">عربي</button>
+  </div>
+</div>
+
+<section id="hero">
+  <div class="hero-tc-row">
+    <span class="rec"><span class="rec-dot"></span> LIVE PORTFOLIO</span>
+    <span>BELBIS, EG · REMOTE READY</span>
+  </div>
+  <h1 class="hero-title">
+    <span class="line"><span>ABDALLAH</span></span>
+    <span class="line"><span>AL-SHAMY</span></span>
+  </h1>
+  <p class="hero-role">
+    <b>Motion Designer &amp; Video Editor.</b> I cut reels, build kinetic type, and animate
+    ideas that hold attention on autoplay — using After Effects, Premiere Pro and
+    AI tools like Runway ML to turn brand stories into motion.
+  </p>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="#contact">Start a project →</a>
+    <a class="btn btn-ghost" href="#experience">See the timeline</a>
+  </div>
+  <div class="wave" aria-hidden="true">
+    <!-- bars injected by JS -->
+  </div>
+</section>
+
+<section id="skills">
+  <span class="eyebrow">// 00:00:08 — Tracks</span>
+  <h2 class="title">What's on the timeline</h2>
+
+  <div class="track-row reveal">
+    <div class="track-label"><b>V1</b>Motion</div>
+    <div class="track-lane">
+      <span class="clip">Motion Graphics</span>
+      <span class="clip">2D Animation</span>
+      <span class="clip">Kinetic Typography</span>
+      <span class="clip">Transitions</span>
+    </div>
+  </div>
+  <div class="track-row reveal">
+    <div class="track-label"><b>V2</b>Editing</div>
+    <div class="track-lane">
+      <span class="clip">Video Editing</span>
+      <span class="clip">Reels Editing</span>
+      <span class="clip">Visual Storytelling</span>
+    </div>
+  </div>
+  <div class="track-row reveal">
+    <div class="track-label"><b>FX</b>AI Tools</div>
+    <div class="track-lane">
+      <span class="clip">Runway ML</span>
+      <span class="clip">Pika Labs</span>
+      <span class="clip">Adobe After Effects</span>
+      <span class="clip">Adobe Premiere Pro</span>
+    </div>
+  </div>
+  <div class="track-row reveal">
+    <div class="track-label"><b>G</b>Design</div>
+    <div class="track-lane">
+      <span class="clip">Photoshop</span>
+      <span class="clip">Illustrator</span>
+      <span class="clip">Branding</span>
+      <span class="clip">Graphic Design</span>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <span class="eyebrow">// 00:00:16 — Keyframes</span>
+  <h2 class="title">Experience</h2>
+
+  <div class="kf-line">
+    <div class="kf-item reveal">
+      <div class="kf-diamond"></div>
+      <span class="kf-time">04/2024 — NOW · REMOTE</span>
+      <h3 class="kf-role">Motion Designer &amp; Video Editor</h3>
+      <p class="kf-org">Rushm — Saudi Arabia</p>
+      <ul class="kf-notes">
+        <li>Produce branded visuals aligned with evolving campaign tones and seasonal trends.</li>
+        <li>Create content built for silent viewing, optimized for social autoplay.</li>
+        <li>Design reusable animated templates that keep teams consistent and save production time.</li>
+      </ul>
+    </div>
+    <div class="kf-item reveal">
+      <div class="kf-diamond"></div>
+      <span class="kf-time">01/2024 — 06/2024 · ON-SITE</span>
+      <h3 class="kf-role">Motion Designer &amp; Video Editor</h3>
+      <p class="kf-org">Proosite</p>
+      <ul class="kf-notes">
+        <li>Crafted motion graphics that simplified complex ideas for non-expert audiences.</li>
+        <li>Worked across departments to visually support product launches and internal training.</li>
+        <li>Adapted designs for multiple platforms, keeping consistency across web and mobile.</li>
+      </ul>
+    </div>
+    <div class="kf-item reveal">
+      <div class="kf-diamond"></div>
+      <span class="kf-time">02/2023 — 12/2023 · REMOTE</span>
+      <h3 class="kf-role">Motion Designer &amp; Video Editor</h3>
+      <p class="kf-org">Media Lisza</p>
+      <ul class="kf-notes">
+        <li>Boosted views 30% through animation and UX improvements.</li>
+        <li>Led campaigns reaching 100K+ users, raising satisfaction 15%.</li>
+        <li>Enhanced visuals and storyboards, increasing retention 25%.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="videos" hidden>
+  <div class="video-grid" id="videoGrid"></div>
+</section>
+
+<section id="training">
+  <span class="eyebrow">// 00:00:24 — Bin</span>
+  <h2 class="title">Training reel</h2>
+  <div class="reel-grid">
+    <div class="reel-card reveal">
+      <span class="reel-year mono">2025</span>
+      <h3 class="reel-name">Advanced Motion Design</h3>
+      <p class="reel-org">MovArt — Cairo, Egypt</p>
+      <p class="reel-desc">Professional-level motion techniques: complex transitions, 3D integration, advanced visual effects.</p>
+    </div>
+    <div class="reel-card reveal">
+      <span class="reel-year mono">2024</span>
+      <h3 class="reel-name">Motion Foundation</h3>
+      <p class="reel-org">ben marriott</p>
+      <p class="reel-desc">Foundational motion design training covering animation basics, visual storytelling, and design principles.</p>
+    </div>
+    <div class="reel-card reveal">
+      <span class="reel-year mono">2023</span>
+      <h3 class="reel-name">Motion Design Course</h3>
+      <p class="reel-org">Motion Beast</p>
+      <p class="reel-desc">Advanced motion design principles: animation curves, transitions, and kinetic typography.</p>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <span class="eyebrow">// 00:00:30 — Metadata</span>
+  <h2 class="title">Education</h2>
+  <div class="edu-box reveal">
+    <div>
+      <span class="kf-time">10/2023 — PRESENT · CAIRO, EGYPT</span>
+      <h3 class="kf-role" style="margin-bottom:2px;">Bachelor of Commerce</h3>
+      <p class="kf-org" style="margin:0;">Al-Azhar University — Faculty of Commerce</p>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <span class="eyebrow">// 00:00:38 — Export</span>
+  <h2 class="title">Let's render something</h2>
+  <div class="export-panel reveal">
+    <div class="export-head">
+      <span>EXPORT SETTINGS</span>
+      <span class="dots"><i></i><i></i><i></i></span>
+    </div>
+    <div class="export-row">
+      <span class="k">EMAIL</span>
+      <span class="v"><a href="mailto:abdallaalshamy60@gmail.com">abdallaalshamy60@gmail.com</a></span>
+    </div>
+    <div class="export-row">
+      <span class="k">PHONE</span>
+      <span class="v"><a href="tel:+201068199751">+20 106 819 9751</a></span>
+    </div>
+    <div class="export-row">
+      <span class="k">LOCATION</span>
+      <span class="v">Belbis, Sharqia, Egypt</span>
+    </div>
+    <div class="export-row">
+      <span class="k">STATUS</span>
+      <span class="v">Available for remote &amp; freelance work</span>
+    </div>
+    <a href="mailto:abdallaalshamy60@gmail.com?subject=Let's%20work%20together">
+      <button class="export-go">▶ RENDER PROJECT — CONTACT ME</button>
+    </a>
+  </div>
+</section>
+
+<footer>ABDALLAH AL-SHAMY · MOTION DESIGNER &amp; VIDEO EDITOR · © 2026</footer>
+
+<script src="videos/videos-manifest.js"></script>
+<script>
+  const content = {
+    en: {
+      title: 'Abdallah Al-shamy — Motion Designer & Video Editor',
+      langButton: 'عربي',
+      brand: 'A.SHAMY',
+      live: 'LIVE PORTFOLIO',
+      location: 'BELBIS, EG · REMOTE READY',
+      heroLines: ['ABDALLAH', 'AL-SHAMY'],
+      heroRole: '<b>Motion Designer &amp; Video Editor.</b> I cut reels, build kinetic type, and animate ideas that hold attention on autoplay — using After Effects, Premiere Pro and AI tools like Runway ML to turn brand stories into motion.',
+      ctaPrimary: 'Start a project →',
+      ctaSecondary: 'See the timeline',
+      sections: {
+        skillsEyebrow: '// 00:00:08 — Tracks',
+        skillsTitle: "What's on the timeline",
+        experienceEyebrow: '// 00:00:16 — Keyframes',
+        experienceTitle: 'Experience',
+        trainingEyebrow: '// 00:00:24 — Bin',
+        trainingTitle: 'Training reel',
+        educationEyebrow: '// 00:00:30 — Metadata',
+        educationTitle: 'Education',
+        contactEyebrow: '// 00:00:38 — Export',
+        contactTitle: "Let's render something"
+      },
+      trackLabels: [
+        '<b>V1</b>Motion',
+        '<b>V2</b>Editing',
+        '<b>FX</b>AI Tools',
+        '<b>G</b>Design'
+      ],
+      clips: [
+        ['Motion Graphics', '2D Animation', 'Kinetic Typography', 'Transitions'],
+        ['Video Editing', 'Reels Editing', 'Visual Storytelling'],
+        ['Runway ML', 'Pika Labs', 'Adobe After Effects', 'Adobe Premiere Pro'],
+        ['Photoshop', 'Illustrator', 'Branding', 'Graphic Design']
+      ],
+      experience: [
+        {
+          time: '04/2024 — NOW · REMOTE',
+          role: 'Motion Designer & Video Editor',
+          org: 'Rushm — Saudi Arabia',
+          notes: [
+            'Produce branded visuals aligned with evolving campaign tones and seasonal trends.',
+            'Create content built for silent viewing, optimized for social autoplay.',
+            'Design reusable animated templates that keep teams consistent and save production time.'
+          ]
+        },
+        {
+          time: '01/2024 — 06/2024 · ON-SITE',
+          role: 'Motion Designer & Video Editor',
+          org: 'Proosite',
+          notes: [
+            'Crafted motion graphics that simplified complex ideas for non-expert audiences.',
+            'Worked across departments to visually support product launches and internal training.',
+            'Adapted designs for multiple platforms, keeping consistency across web and mobile.'
+          ]
+        },
+        {
+          time: '02/2023 — 12/2023 · REMOTE',
+          role: 'Motion Designer & Video Editor',
+          org: 'Media Lisza',
+          notes: [
+            'Boosted views 30% through animation and UX improvements.',
+            'Led campaigns reaching 100K+ users, raising satisfaction 15%.',
+            'Enhanced visuals and storyboards, increasing retention 25%.'
+          ]
+        }
+      ],
+      training: [
+        ['2025', 'Advanced Motion Design', 'MovArt — Cairo, Egypt', 'Professional-level motion techniques: complex transitions, 3D integration, advanced visual effects.'],
+        ['2024', 'Motion Foundation', 'ben marriott', 'Foundational motion design training covering animation basics, visual storytelling, and design principles.'],
+        ['2023', 'Motion Design Course', 'Motion Beast', 'Advanced motion design principles: animation curves, transitions, and kinetic typography.']
+      ],
+      education: {
+        time: '10/2023 — PRESENT · CAIRO, EGYPT',
+        degree: 'Bachelor of Commerce',
+        org: 'Al-Azhar University — Faculty of Commerce'
+      },
+      contact: {
+        head: 'EXPORT SETTINGS',
+        keys: ['EMAIL', 'PHONE', 'LOCATION', 'STATUS'],
+        location: 'Belbis, Sharqia, Egypt',
+        status: 'Available for remote & freelance work',
+        button: '▶ RENDER PROJECT — CONTACT ME'
+      },
+      footer: 'ABDALLAH AL-SHAMY · MOTION DESIGNER & VIDEO EDITOR · © 2026'
+    },
+    ar: {
+      title: 'عبدالله الشامي — موشن ديزاينر ومونتير فيديو',
+      langButton: 'English',
+      brand: 'الشامي',
+      live: 'بورتفوليو مباشر',
+      location: 'بلبيس، مصر · متاح للعمل عن بعد',
+      heroLines: ['عبدالله', 'الشامي'],
+      heroRole: '<b>موشن ديزاينر ومونتير فيديو.</b> أصمم ريلز، تايبوجرافي متحركة، وأفكار بصرية تشد الانتباه من أول ثانية — باستخدام After Effects وPremiere Pro وأدوات الذكاء الاصطناعي مثل Runway ML لتحويل قصص البراندات إلى حركة.',
+      ctaPrimary: 'ابدأ مشروع →',
+      ctaSecondary: 'شاهد التايملاين',
+      sections: {
+        skillsEyebrow: '// 00:00:08 — المسارات',
+        skillsTitle: 'موجود إيه على التايملاين',
+        experienceEyebrow: '// 00:00:16 — الكي فريمز',
+        experienceTitle: 'الخبرات',
+        trainingEyebrow: '// 00:00:24 — التدريب',
+        trainingTitle: 'تدريبات ومهارات',
+        educationEyebrow: '// 00:00:30 — البيانات',
+        educationTitle: 'التعليم',
+        contactEyebrow: '// 00:00:38 — التصدير',
+        contactTitle: 'خلينا نرندر مشروع جديد'
+      },
+      trackLabels: [
+        '<b>V1</b>موشن',
+        '<b>V2</b>مونتاج',
+        '<b>FX</b>ذكاء اصطناعي',
+        '<b>G</b>تصميم'
+      ],
+      clips: [
+        ['موشن جرافيك', 'تحريك ثنائي الأبعاد', 'تايبوجرافي متحركة', 'ترانزيشنز'],
+        ['مونتاج فيديو', 'مونتاج ريلز', 'سرد بصري'],
+        ['Runway ML', 'Pika Labs', 'Adobe After Effects', 'Adobe Premiere Pro'],
+        ['Photoshop', 'Illustrator', 'هوية بصرية', 'تصميم جرافيك']
+      ],
+      experience: [
+        {
+          time: '04/2024 — الآن · عن بعد',
+          role: 'موشن ديزاينر ومونتير فيديو',
+          org: 'رشم — السعودية',
+          notes: [
+            'إنتاج فيجوالز للبراند متماشية مع نبرة الحملات والترندات الموسمية.',
+            'إنشاء محتوى مناسب للمشاهدة بدون صوت ومهيأ لمنصات السوشيال.',
+            'تصميم قوالب متحركة قابلة لإعادة الاستخدام للحفاظ على الاتساق وتوفير وقت الإنتاج.'
+          ]
+        },
+        {
+          time: '01/2024 — 06/2024 · حضوري',
+          role: 'موشن ديزاينر ومونتير فيديو',
+          org: 'Proosite',
+          notes: [
+            'تنفيذ موشن جرافيك يبسّط الأفكار المعقدة لجمهور غير متخصص.',
+            'التعاون مع فرق مختلفة لدعم إطلاق المنتجات والتدريب الداخلي بصريًا.',
+            'تكييف التصميمات لمنصات متعددة مع الحفاظ على شكل موحد عبر الويب والموبايل.'
+          ]
+        },
+        {
+          time: '02/2023 — 12/2023 · عن بعد',
+          role: 'موشن ديزاينر ومونتير فيديو',
+          org: 'Media Lisza',
+          notes: [
+            'زيادة المشاهدات بنسبة 30٪ من خلال تحسينات في الحركة وتجربة المشاهدة.',
+            'قيادة حملات وصلت إلى أكثر من 100 ألف مستخدم ورفعت الرضا بنسبة 15٪.',
+            'تحسين الفيجوالز والستوري بوردز مما زاد الاحتفاظ بالمشاهدة بنسبة 25٪.'
+          ]
+        }
+      ],
+      training: [
+        ['2025', 'موشن ديزاين متقدم', 'MovArt — القاهرة، مصر', 'تقنيات موشن احترافية: ترانزيشنز مركبة، دمج ثلاثي الأبعاد، ومؤثرات بصرية متقدمة.'],
+        ['2024', 'أساسيات الموشن', 'ben marriott', 'تدريب تأسيسي في الموشن يغطي مبادئ التحريك، السرد البصري، وأسس التصميم.'],
+        ['2023', 'كورس موشن ديزاين', 'Motion Beast', 'مبادئ موشن متقدمة: منحنيات الحركة، الترانزيشنز، والتايبوجرافي المتحركة.']
+      ],
+      education: {
+        time: '10/2023 — حتى الآن · القاهرة، مصر',
+        degree: 'بكالوريوس تجارة',
+        org: 'جامعة الأزهر — كلية التجارة'
+      },
+      contact: {
+        head: 'إعدادات التصدير',
+        keys: ['البريد الإلكتروني', 'الهاتف', 'الموقع', 'الحالة'],
+        location: 'بلبيس، الشرقية، مصر',
+        status: 'متاح للعمل عن بعد والمشاريع الحرة',
+        button: '▶ رندر المشروع — تواصل معي'
+      },
+      footer: 'عبدالله الشامي · موشن ديزاينر ومونتير فيديو · © 2026'
+    }
+  };
+
+  const portfolioVideos = window.portfolioVideos || [];
+
+  let currentLang = localStorage.getItem('portfolioLang') || 'en';
+
+  // build waveform bars
+  const wave = document.querySelector('.wave');
+  for(let i=0;i<40;i++){
+    const bar = document.createElement('i');
+    const h = 8 + Math.round(Math.random()*28);
+    bar.style.height = h+'px';
+    bar.style.animationDelay = (Math.random()*2).toFixed(2)+'s';
+    wave.appendChild(bar);
+  }
+
+  // scrubber ticks matched to sections
+  const sections = [
+    {id:'hero', tc:'00:00:00:00', labels:{en:'INTRO', ar:'البداية'}},
+    {id:'skills', tc:'00:00:08:00', labels:{en:'TRACKS', ar:'المهارات'}},
+    {id:'experience', tc:'00:00:16:00', labels:{en:'WORK', ar:'العمل'}},
+    ...(portfolioVideos.length ? [{id:'videos', tc:'00:00:22:00', labels:{en:'VIDEOS', ar:'فيديوهات'}}] : []),
+    {id:'training', tc:'00:00:24:00', labels:{en:'TRAINING', ar:'التدريب'}},
+    {id:'education', tc:'00:00:30:00', labels:{en:'EDU', ar:'التعليم'}},
+    {id:'contact', tc:'00:00:38:00', labels:{en:'CONTACT', ar:'تواصل'}},
+  ];
+  const track = document.getElementById('scrubTrack');
+  const playhead = document.getElementById('playhead');
+  const tcDisplay = document.getElementById('tcDisplay');
+  const tickEls = [];
+
+  sections.forEach((s, i)=>{
+    const pct = (i/(sections.length-1))*100;
+    const btn = document.createElement('button');
+    btn.className = 'scrub-tick';
+    btn.style.left = pct+'%';
+    btn.innerHTML = '<span class="kf"></span><span>'+s.labels[currentLang]+'</span>';
+    btn.addEventListener('click', ()=>{
+      document.getElementById(s.id).scrollIntoView({behavior:'smooth'});
+    });
+    track.appendChild(btn);
+    tickEls.push({el:btn, id:s.id, pct, tc:s.tc});
+  });
+
+  const langToggle = document.getElementById('langToggle');
+
+  function setText(selector, value){
+    const el = document.querySelector(selector);
+    if(el) el.textContent = value;
+  }
+
+  function setHTML(selector, value){
+    const el = document.querySelector(selector);
+    if(el) el.innerHTML = value;
+  }
+
+  function renderList(listEl, items){
+    if(!listEl) return;
+    listEl.innerHTML = '';
+    items.forEach(item=>{
+      const li = document.createElement('li');
+      li.textContent = item;
+      listEl.appendChild(li);
+    });
+  }
+
+  function getLocalized(value, lang){
+    if(typeof value === 'string') return value;
+    return value?.[lang] || value?.en || '';
+  }
+
+  function renderVideos(lang){
+    const section = document.getElementById('videos');
+    const grid = document.getElementById('videoGrid');
+    if(!section || !grid) return;
+    section.hidden = portfolioVideos.length === 0;
+    grid.innerHTML = '';
+
+    portfolioVideos.forEach(video=>{
+      const card = document.createElement('article');
+      card.className = 'video-card reveal';
+
+      const frame = document.createElement('div');
+      frame.className = 'video-frame';
+
+      if(video.type === 'youtube' || video.type === 'vimeo'){
+        const iframe = document.createElement('iframe');
+        iframe.src = video.src;
+        iframe.title = 'Portfolio video';
+        iframe.loading = 'lazy';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.allowFullscreen = true;
+        frame.appendChild(iframe);
+      }else{
+        const player = document.createElement('video');
+        player.src = video.src;
+        if(video.poster) player.poster = video.poster;
+        player.controls = true;
+        player.preload = 'metadata';
+        frame.appendChild(player);
+      }
+
+      card.append(frame);
+      grid.appendChild(card);
+    });
+  }
+
+  function setLang(lang){
+    currentLang = lang;
+    const t = content[lang];
+    localStorage.setItem('portfolioLang', lang);
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.body.classList.toggle('ar', lang === 'ar');
+    document.title = t.title;
+
+    setText('.scrub-brand', t.brand);
+    setText('.rec', t.live);
+    const rec = document.querySelector('.rec');
+    if(rec) rec.insertAdjacentHTML('afterbegin', '<span class="rec-dot"></span> ');
+    setText('.hero-tc-row > span:last-child', t.location);
+    document.querySelectorAll('.hero-title .line span').forEach((el, i)=>{ el.textContent = t.heroLines[i]; });
+    setHTML('.hero-role', t.heroRole);
+    setText('.btn-primary', t.ctaPrimary);
+    setText('.btn-ghost', t.ctaSecondary);
+    langToggle.textContent = t.langButton;
+
+    setText('#skills .eyebrow', t.sections.skillsEyebrow);
+    setText('#skills .title', t.sections.skillsTitle);
+    setText('#experience .eyebrow', t.sections.experienceEyebrow);
+    setText('#experience .title', t.sections.experienceTitle);
+    setText('#training .eyebrow', t.sections.trainingEyebrow);
+    setText('#training .title', t.sections.trainingTitle);
+    setText('#education .eyebrow', t.sections.educationEyebrow);
+    setText('#education .title', t.sections.educationTitle);
+    setText('#contact .eyebrow', t.sections.contactEyebrow);
+    setText('#contact .title', t.sections.contactTitle);
+
+    document.querySelectorAll('.track-label').forEach((el, i)=>{ el.innerHTML = t.trackLabels[i]; });
+    document.querySelectorAll('.track-lane').forEach((lane, i)=>{
+      lane.querySelectorAll('.clip').forEach((clip, j)=>{ clip.textContent = t.clips[i][j]; });
+    });
+
+    document.querySelectorAll('.kf-line .kf-item').forEach((item, i)=>{
+      const data = t.experience[i];
+      item.querySelector('.kf-time').textContent = data.time;
+      item.querySelector('.kf-role').textContent = data.role;
+      item.querySelector('.kf-org').textContent = data.org;
+      renderList(item.querySelector('.kf-notes'), data.notes);
+    });
+
+    document.querySelectorAll('.reel-card').forEach((card, i)=>{
+      const data = t.training[i];
+      card.querySelector('.reel-year').textContent = data[0];
+      card.querySelector('.reel-name').textContent = data[1];
+      card.querySelector('.reel-org').textContent = data[2];
+      card.querySelector('.reel-desc').textContent = data[3];
+    });
+    renderVideos(lang);
+
+    setText('#education .kf-time', t.education.time);
+    setText('#education .kf-role', t.education.degree);
+    setText('#education .kf-org', t.education.org);
+
+    setText('.export-head > span:first-child', t.contact.head);
+    document.querySelectorAll('.export-row .k').forEach((el, i)=>{ el.textContent = t.contact.keys[i]; });
+    setText('.export-row:nth-of-type(4) .v', t.contact.location);
+    setText('.export-row:nth-of-type(5) .v', t.contact.status);
+    setText('.export-go', t.contact.button);
+    setText('footer', t.footer);
+
+    tickEls.forEach((tick, i)=>{
+      const label = tick.el.querySelector('span:last-child');
+      if(label) label.textContent = sections[i].labels[lang];
+    });
+  }
+
+  langToggle.addEventListener('click', ()=>{
+    setLang(currentLang === 'en' ? 'ar' : 'en');
+  });
+  setLang(currentLang);
+
+  function frameToTC(scrollFraction){
+    const totalFrames = 45; // arbitrary stylised total (00:00:45:00)
+    const f = Math.min(totalFrames, Math.floor(scrollFraction*totalFrames));
+    const secs = Math.floor(f/1);
+    const hh = '00', mm = '00';
+    const ss = String(Math.min(59, secs)).padStart(2,'0');
+    const ff = String(Math.floor((scrollFraction*totalFrames*10)%10)).padStart(2,'0');
+    return hh+':'+mm+':'+ss+':'+ff;
+  }
+
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const scrollH = (doc.scrollHeight - doc.clientHeight) || 1;
+    const frac = Math.max(0, Math.min(1, scrollTop/scrollH));
+    playhead.style.left = (frac*100)+'%';
+    tcDisplay.textContent = frameToTC(frac);
+
+    // active tick = last tick whose section top has passed viewport top+120
+    let activeIdx = 0;
+    sections.forEach((s,i)=>{
+      const el = document.getElementById(s.id);
+      if(el.getBoundingClientRect().top < 140) activeIdx = i;
+    });
+    tickEls.forEach((t,i)=> t.el.classList.toggle('active', i===activeIdx));
+  }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  // reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:0.15});
+  revealEls.forEach(el=> io.observe(el));
+</script>
+
+</body>
+</html>

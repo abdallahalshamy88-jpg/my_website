@@ -133,23 +133,18 @@
   .hero-content{ flex:1; min-width:0; }
   .hero-photo{
     flex-shrink:0;
-    width:220px;
-    border-radius:var(--radius);
+    width:210px; height:210px;
+    border-radius:50%;
     overflow:hidden;
-    border:1px solid var(--line);
+    border:2px solid var(--orange);
+    box-shadow:0 0 0 6px var(--orange-dim), 0 0 35px rgba(255,122,69,0.18);
     position:relative;
   }
-  .hero-photo::before{
-    content:''; position:absolute; top:0; left:0; right:0; height:3px;
-    background:repeating-linear-gradient(90deg,var(--orange) 0 8px,transparent 8px 14px);
-    z-index:1;
-  }
   .hero-photo img{
-    width:100%; height:auto;
-    display:block;
+    width:100%; height:100%;
     object-fit:cover;
-    object-position:center top;
-    filter:contrast(1.05) saturate(0.92);
+    object-position:center 20%;
+    display:block;
   }
   .hero-tc-row{
     display:flex; justify-content:space-between; align-items:center;
@@ -277,13 +272,25 @@
   }
   .works-info{
     padding:14px 16px; border-top:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
   }
+  .works-info-text{ flex:1; min-width:0; }
   .works-info h3{
     font-size:14px; font-weight:600; margin:0 0 4px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   }
   .works-tag{
     font-family:'IBM Plex Mono', monospace; font-size:11px;
     color:var(--orange); letter-spacing:0.06em; text-transform:uppercase;
+  }
+  .works-link-btn{
+    font-family:'IBM Plex Mono', monospace; font-size:11px;
+    padding:6px 12px; border-radius:var(--radius);
+    border:1px solid var(--line); color:var(--text); text-decoration:none;
+    white-space:nowrap; transition:all .15s; background:var(--panel-2);
+  }
+  .works-link-btn:hover{
+    border-color:var(--orange); color:var(--orange); background:var(--orange-dim);
   }
 
   .works-empty{
@@ -418,7 +425,7 @@
     body.ar #wa-float{ right:auto; left:20px; }
     .works-folder-embed{ height:380px; }
     .hero-layout{ flex-direction:column-reverse; gap:28px; }
-    .hero-photo{ width:100%; max-width:280px; }
+    .hero-photo{ width:160px; height:160px; margin:0 auto; }
   }
 
   body.ar{
@@ -710,19 +717,39 @@
    ============================================================ */
 const worksConfig = {
   motion: [
-    // مثال / Example:
-    // { id: 'GOOGLE_DRIVE_FILE_ID', title: 'Brand Campaign', title_ar: 'حملة براند' },
-    // { id: 'GOOGLE_DRIVE_FILE_ID', title: 'Kinetic Type', title_ar: 'تايبوجرافي متحركة' },
+    { id: '16xqNDggU1hG95jlY7csIWybvLKJmRPms', title: 'Motion Reel 01', title_ar: 'موشن ريل 01' },
+    { id: '1Zq2Loi40Y1XHKqC04vPA9vC9SrJIVsOa', title: 'Motion Reel 02', title_ar: 'موشن ريل 02' },
+    { id: '18eswz2ilR4MNAhwGDVfABviySg_PAvbK', title: 'Motion Reel 03', title_ar: 'موشن ريل 03' },
+    { id: '1nA2XyOsGqjxwE6q5zdGoD-zve2PWsgDl', title: 'Motion Reel 04', title_ar: 'موشن ريل 04' },
+    { id: '1KEu5_APUwiZOmVfF_p8_hCtpiprVUKv3', title: 'Motion Reel 05', title_ar: 'موشن ريل 05' },
+    { id: '18bYa2rSztwqt4PzxzneScyBy3h-nakWy', title: 'Motion Reel 06', title_ar: 'موشن ريل 06' },
+    { id: '1wusQwqBDJEHqECv3eR6GFaWWIHl1yooS', title: 'Motion Reel 07', title_ar: 'موشن ريل 07' },
+    { id: '1GZ9FePTpw6BH3eCr-3PkMDtTHLubqPF2', title: 'Motion Reel 08', title_ar: 'موشن ريل 08' },
+    { id: '1s1ZgwNBtL6BLZFR8gYo0tDAhUC_5XJ3j', title: 'Motion Reel 09', title_ar: 'موشن ريل 09' },
+    { id: '1cIiECBIvFf90x3_1q-ar7ZM3ikxV9-yw', title: 'Motion Reel 10', title_ar: 'موشن ريل 10' },
+    { id: '1qSHFfsvJRZdmaYldc3LjXwuCwiZV0Ue4', title: 'Motion Reel 11', title_ar: 'موشن ريل 11' },
+    { id: '1mHS-9CRBHXP_LyAyVvGIFZS9iOlPYXyB', title: 'Motion Reel 12', title_ar: 'موشن ريل 12' },
+    { id: '1GzNYb21egdqLhMxus2lXZnJn1_Ng3DPd', title: 'Motion Reel 13', title_ar: 'موشن ريل 13' },
+    { id: '1oPJ58ZlFaE2d7cVvLre1-rSRnI6MpdGn', title: 'Spedia Campaign',  title_ar: 'حملة سبيديا'   },
   ],
   editing: [
-    // مثال / Example:
-    // { id: 'GOOGLE_DRIVE_FILE_ID', title: 'Reel Edit', title_ar: 'مونتاج ريل' },
-    // { id: 'GOOGLE_DRIVE_FILE_ID', title: 'Brand Video', title_ar: 'فيديو براند' },
+    { id: '1YauqIL1zy0laU-cx1prHQ_gHG8v2flOi', title: 'Hassan Kamel Al-Sabbah', title_ar: 'حسن كامل الصباح'    },
+    { id: '1pYcyMEUomzGCOmyARlPq-kAw2KyPH8Aw', title: 'Dr. Mostafa Mahmoud',    title_ar: 'دكتور مصطفي محمود' },
+    { id: '14wJXumftXdup7rb-AuiKPGb5yzYznNKM', title: "Mus'ab ibn Umayr",       title_ar: 'مصعب بن عمير'      },
+    { id: '1yC5Ko04yW7clBtEiOt_zYu5PXjiQUBKo', title: 'Al-Habbab',              title_ar: 'الحباب'             },
+    { id: '14mOgmNVSUKynAdsFw0KyPPmmYtkwNmEW', title: 'Ibn Al-Haytham',          title_ar: 'ابن الهيثم'         },
+    { id: '1BjngebRck6iKrzjiF5fE_5NVrxhmuuPn', title: 'Editing Reel 01',         title_ar: 'مونتاج ريل 01'      },
+    { id: '15PCk0D6BZkJrTU0ojgzcBfiYVb3GUWkZ', title: 'Editing Reel 02',         title_ar: 'مونتاج ريل 02'      },
+    { id: '1fyvcuWUOLleaSN0Qbilq0nepiBu4lmev', title: 'Editing Reel 03',         title_ar: 'مونتاج ريل 03'      },
+    { id: '1q4fGKgCuWDjzfVmfx05L-7wrHTNArwGC', title: 'Editing Reel 04',         title_ar: 'مونتاج ريل 04'      },
+    { id: '1sP1rJVEjNm-iityAhFQUiHhfL-w6ECNi', title: 'Editing Reel 05',         title_ar: 'مونتاج ريل 05'      },
+    { id: '1UfSK0flKV8r2ej1-BmFGorWWH4WDmVD6', title: 'Editing Reel 06',         title_ar: 'مونتاج ريل 06'      },
+    { id: '1pu__B4VGc66qzDWldNsF358qdFZrx4cg', title: 'Editing Reel 07',         title_ar: 'مونتاج ريل 07'      },
+    { id: '1YMhfXOIpOQS9oHEFGGW2zhP7tmZY7B39', title: 'Editing Reel 08',         title_ar: 'مونتاج ريل 08'      },
+    { id: '1Ci-p-l7pdfH7bZny9LyUHJ7-mC9E36cl', title: 'Editing Reel 09',         title_ar: 'مونتاج ريل 09'      },
   ],
-  /* رابط الفولدر العادي للمشاركة */
   driveFolderUrl: 'https://drive.google.com/drive/folders/1-TKqTgYe_zPrIhFrP77lz3fIvodlpAMI',
-  /* رابط embed مباشر — يشغّل الفيديوهات جوه الموقع */
-  driveEmbedUrl: 'https://drive.google.com/embeddedfolderview?id=1-TKqTgYe_zPrIhFrP77lz3fIvodlpAMI#grid'
+  driveEmbedUrl:  'https://drive.google.com/embeddedfolderview?id=1-TKqTgYe_zPrIhFrP77lz3fIvodlpAMI#grid'
 };
 
 /* ============================================================ */
@@ -1000,8 +1027,13 @@ const worksConfig = {
               </iframe>
             </div>
             <div class="works-info">
-              <h3>${(lang === 'ar' && v.title_ar) ? v.title_ar : v.title}</h3>
-              <span class="works-tag">${tagLabel}</span>
+              <div class="works-info-text">
+                <h3>${(lang === 'ar' && v.title_ar) ? v.title_ar : v.title}</h3>
+                <span class="works-tag">${tagLabel}</span>
+              </div>
+              <a href="https://drive.google.com/file/d/${v.id}/view" target="_blank" rel="noopener" class="works-link-btn">
+                ${lang === 'ar' ? 'المشروع ↗' : 'Project ↗'}
+              </a>
             </div>
           </article>`).join('')
       }</div>`;

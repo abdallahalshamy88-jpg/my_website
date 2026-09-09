@@ -133,18 +133,23 @@
   .hero-content{ flex:1; min-width:0; }
   .hero-photo{
     flex-shrink:0;
-    width:200px; height:200px;
-    border-radius:50%;
+    width:220px;
+    border-radius:var(--radius);
     overflow:hidden;
-    border:2px solid var(--orange);
-    box-shadow:0 0 0 6px var(--orange-dim), 0 0 40px rgba(255,122,69,0.15);
+    border:1px solid var(--line);
     position:relative;
   }
+  .hero-photo::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:repeating-linear-gradient(90deg,var(--orange) 0 8px,transparent 8px 14px);
+    z-index:1;
+  }
   .hero-photo img{
-    width:100%; height:100%;
+    width:100%; height:auto;
+    display:block;
     object-fit:cover;
     object-position:center top;
-    display:block;
+    filter:contrast(1.05) saturate(0.92);
   }
   .hero-tc-row{
     display:flex; justify-content:space-between; align-items:center;
@@ -413,7 +418,7 @@
     body.ar #wa-float{ right:auto; left:20px; }
     .works-folder-embed{ height:380px; }
     .hero-layout{ flex-direction:column-reverse; gap:28px; }
-    .hero-photo{ width:140px; height:140px; }
+    .hero-photo{ width:100%; max-width:280px; }
   }
 
   body.ar{
@@ -487,7 +492,7 @@
 <section id="hero">
   <div class="hero-tc-row">
     <span class="rec"><span class="rec-dot"></span> LIVE PORTFOLIO</span>
-    <span>BELBIS, EG · REMOTE READY</span>
+    <span>10TH OF RAMADAN, EG · REMOTE READY</span>
   </div>
   <div class="hero-layout">
     <div class="hero-content">
@@ -640,17 +645,8 @@
   </div>
 </section>
 
-<section id="education">
-  <span class="eyebrow">// 00:00:34 — Metadata</span>
-  <h2 class="title">Education</h2>
-  <div class="edu-box reveal">
-    <div>
-      <span class="kf-time">10/2023 — PRESENT · CAIRO, EGYPT</span>
-      <h3 class="kf-role" style="margin-bottom:2px;">Bachelor of Commerce</h3>
-      <p class="kf-org" style="margin:0;">Al-Azhar University — Faculty of Commerce</p>
-    </div>
-  </div>
-</section>
+
+
 
 <section id="contact">
   <span class="eyebrow">// 00:00:42 — Export</span>
@@ -674,7 +670,7 @@
     </div>
     <div class="export-row">
       <span class="k">LOCATION</span>
-      <span class="v">Belbis, Sharqia, Egypt</span>
+      <span class="v">10th of Ramadan, Egypt</span>
     </div>
     <div class="export-row">
       <span class="k">STATUS</span>
@@ -737,7 +733,7 @@ const worksConfig = {
       langButton: 'عربي',
       brand: 'A.SHAMY',
       live: 'LIVE PORTFOLIO',
-      location: 'BELBIS, EG · REMOTE READY',
+      location: '10TH OF RAMADAN, EG · REMOTE READY',
       heroLines: ['ABDALLAH', 'AL-SHAMY'],
       heroRole: '<b>Motion Designer &amp; Video Editor.</b> I cut reels, build kinetic type, and animate ideas that hold attention on autoplay — using After Effects, Premiere Pro and AI tools like Runway ML to turn brand stories into motion.',
       ctaPrimary: 'Start a project →',
@@ -819,7 +815,7 @@ const worksConfig = {
         head: 'EXPORT SETTINGS',
         keys: ['EMAIL', 'PHONE', 'WHATSAPP', 'LOCATION', 'STATUS'],
         whatsapp: 'wa.me/201068199751',
-        location: 'Belbis, Sharqia, Egypt',
+        location: '10th of Ramadan, Egypt',
         status: 'Available for remote & freelance work',
         button: '▶ RENDER PROJECT — WHATSAPP ME'
       },
@@ -830,7 +826,7 @@ const worksConfig = {
       langButton: 'English',
       brand: 'الشامي',
       live: 'بورتفوليو مباشر',
-      location: 'بلبيس، مصر · متاح للعمل عن بعد',
+      location: 'العاشر من رمضان، مصر · متاح للعمل عن بعد',
       heroLines: ['عبدالله', 'الشامي'],
       heroRole: '<b>موشن ديزاينر ومونتير فيديو.</b> أصمم ريلز، تايبوجرافي متحركة، وأفكار بصرية تشد الانتباه من أول ثانية — باستخدام After Effects وPremiere Pro وأدوات الذكاء الاصطناعي مثل Runway ML لتحويل قصص البراندات إلى حركة.',
       ctaPrimary: 'ابدأ مشروع →',
@@ -912,7 +908,7 @@ const worksConfig = {
         head: 'إعدادات التصدير',
         keys: ['البريد الإلكتروني', 'الهاتف', 'واتساب', 'الموقع', 'الحالة'],
         whatsapp: 'wa.me/201068199751',
-        location: 'بلبيس، الشرقية، مصر',
+        location: 'العاشر من رمضان، مصر',
         status: 'متاح للعمل عن بعد والمشاريع الحرة',
         button: '▶ رندر المشروع — تواصل عبر واتساب'
       },
@@ -942,8 +938,7 @@ const worksConfig = {
     {id:'works',      tc:'00:00:22:00', labels:{en:'WORKS',    ar:'الأعمال'}},
     ...(portfolioVideos.length ? [{id:'videos', tc:'00:00:25:00', labels:{en:'VIDEOS', ar:'فيديوهات'}}] : []),
     {id:'training',   tc:'00:00:28:00', labels:{en:'TRAINING', ar:'التدريب'}},
-    {id:'education',  tc:'00:00:34:00', labels:{en:'EDU',      ar:'التعليم'}},
-    {id:'contact',    tc:'00:00:42:00', labels:{en:'CONTACT',  ar:'تواصل'}},
+    {id:'contact',    tc:'00:00:38:00', labels:{en:'CONTACT',  ar:'تواصل'}},
   ];
   const track = document.getElementById('scrubTrack');
   const playhead = document.getElementById('playhead');
@@ -1012,14 +1007,20 @@ const worksConfig = {
       }</div>`;
       panel.querySelectorAll('.reveal').forEach(el => io.observe(el));
     } else {
-      /* Embed the entire Google Drive folder — videos visible directly on website */
+      /* No video IDs configured yet — show a clean Drive link card */
+      const t = content[lang].sections;
       panel.innerHTML = `
-        <iframe
-          class="works-folder-embed"
-          src="${worksConfig.driveFolderUrl.replace('drive/folders','embeddedfolderview?id=').replace('?usp=drive_link','').replace('/drive/folders/','')}#grid"
-          frameborder="0"
-          allowfullscreen>
-        </iframe>`;
+        <div class="works-empty reveal">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--orange);opacity:.6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
+          </svg>
+          <p>${t.worksDriveLabel}</p>
+          <a class="btn-drive" href="${worksConfig.driveFolderUrl}" target="_blank" rel="noopener">
+            ${t.worksDriveBtn}
+          </a>
+        </div>`;
+      panel.querySelectorAll('.reveal').forEach(el => io.observe(el));
     }
   }
 

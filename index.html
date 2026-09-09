@@ -127,6 +127,25 @@
 
   /* ---------- Hero ---------- */
   #hero{ padding-top:70px; padding-bottom:80px; }
+  .hero-layout{
+    display:flex; align-items:center; justify-content:space-between; gap:48px;
+  }
+  .hero-content{ flex:1; min-width:0; }
+  .hero-photo{
+    flex-shrink:0;
+    width:200px; height:200px;
+    border-radius:50%;
+    overflow:hidden;
+    border:2px solid var(--orange);
+    box-shadow:0 0 0 6px var(--orange-dim), 0 0 40px rgba(255,122,69,0.15);
+    position:relative;
+  }
+  .hero-photo img{
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position:center top;
+    display:block;
+  }
   .hero-tc-row{
     display:flex; justify-content:space-between; align-items:center;
     font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--muted);
@@ -372,6 +391,13 @@
   .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
   .reveal.in{ opacity:1; transform:translateY(0); }
 
+  /* Works folder embed */
+  .works-folder-embed{
+    width:100%; height:520px;
+    border:1px solid var(--line); border-radius:var(--radius);
+    background:var(--panel); display:block;
+  }
+
   @media (max-width:760px){
     .video-grid{ grid-template-columns:1fr; }
     .works-grid{ grid-template-columns:1fr; }
@@ -385,7 +411,9 @@
     .export-row{ flex-direction:column; align-items:flex-start; gap:4px; }
     #wa-float{ bottom:20px; right:20px; width:48px; height:48px; }
     body.ar #wa-float{ right:auto; left:20px; }
-    .works-empty{ padding:36px 20px; }
+    .works-folder-embed{ height:380px; }
+    .hero-layout{ flex-direction:column-reverse; gap:28px; }
+    .hero-photo{ width:140px; height:140px; }
   }
 
   body.ar{
@@ -461,22 +489,29 @@
     <span class="rec"><span class="rec-dot"></span> LIVE PORTFOLIO</span>
     <span>BELBIS, EG · REMOTE READY</span>
   </div>
-  <h1 class="hero-title">
-    <span class="line"><span>ABDALLAH</span></span>
-    <span class="line"><span>AL-SHAMY</span></span>
-  </h1>
-  <p class="hero-role">
-    <b>Motion Designer &amp; Video Editor.</b> I cut reels, build kinetic type, and animate
-    ideas that hold attention on autoplay — using After Effects, Premiere Pro and
-    AI tools like Runway ML to turn brand stories into motion.
-  </p>
-  <div class="hero-cta">
-    <a class="btn btn-primary" href="#contact">Start a project →</a>
-    <a class="btn btn-ghost" id="ctaWorks" href="#works">View Works</a>
-    <a class="btn btn-ghost" href="#experience">See the timeline</a>
-  </div>
-  <div class="wave" aria-hidden="true">
-    <!-- bars injected by JS -->
+  <div class="hero-layout">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="line"><span>ABDALLAH</span></span>
+        <span class="line"><span>AL-SHAMY</span></span>
+      </h1>
+      <p class="hero-role">
+        <b>Motion Designer &amp; Video Editor.</b> I cut reels, build kinetic type, and animate
+        ideas that hold attention on autoplay — using After Effects, Premiere Pro and
+        AI tools like Runway ML to turn brand stories into motion.
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#contact">Start a project →</a>
+        <a class="btn btn-ghost" id="ctaWorks" href="#works">View Works</a>
+        <a class="btn btn-ghost" href="#experience">See the timeline</a>
+      </div>
+      <div class="wave" aria-hidden="true">
+        <!-- bars injected by JS -->
+      </div>
+    </div>
+    <div class="hero-photo">
+      <img src="./images/profile.png" alt="Abdallah Al-Shamy — Motion Designer" />
+    </div>
   </div>
 </section>
 
@@ -645,7 +680,7 @@
       <span class="k">STATUS</span>
       <span class="v">Available for remote &amp; freelance work</span>
     </div>
-    <a href="https://wa.me/201068199751?text=Hi%20Abdallah%2C%20I%27d%20like%20to%20start%20a%20project%20with%20you" target="_blank" rel="noopener">
+    <a href="https://wa.me/201068199751?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D8%B9%D8%A8%D8%AF%D8%A7%D9%84%D9%84%D9%87%2C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%B9%D9%85%D9%84%20%D9%85%D8%B9%D9%83%20%F0%9F%8E%AC" target="_blank" rel="noopener">
       <button class="export-go">▶ RENDER PROJECT — WHATSAPP ME</button>
     </a>
   </div>
@@ -654,7 +689,7 @@
 <footer>ABDALLAH AL-SHAMY · MOTION DESIGNER &amp; VIDEO EDITOR · © 2026</footer>
 
 <!-- ===== WhatsApp Floating Button ===== -->
-<a id="wa-float" href="https://wa.me/201068199751?text=Hi%20Abdallah%2C%20I%27d%20like%20to%20work%20with%20you"
+<a id="wa-float" href="https://wa.me/201068199751?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D8%B9%D8%A8%D8%AF%D8%A7%D9%84%D9%84%D9%87%2C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%B9%D9%85%D9%84%20%D9%85%D8%B9%D9%83%20%F0%9F%8E%AC"
    target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
   <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
@@ -688,8 +723,10 @@ const worksConfig = {
     // { id: 'GOOGLE_DRIVE_FILE_ID', title: 'Reel Edit', title_ar: 'مونتاج ريل' },
     // { id: 'GOOGLE_DRIVE_FILE_ID', title: 'Brand Video', title_ar: 'فيديو براند' },
   ],
-  /* رابط فولدر Drive الكامل — يظهر لما ما فيش فيديوهات مضافة */
-  driveFolderUrl: 'https://drive.google.com/drive/folders/1-TKqTgYe_zPrIhFrP77lz3fIvodlpAMI'
+  /* رابط الفولدر العادي للمشاركة */
+  driveFolderUrl: 'https://drive.google.com/drive/folders/1-TKqTgYe_zPrIhFrP77lz3fIvodlpAMI',
+  /* رابط embed مباشر — يشغّل الفيديوهات جوه الموقع */
+  driveEmbedUrl: 'https://drive.google.com/embeddedfolderview?id=1-TKqTgYe_zPrIhFrP77lz3fIvodlpAMI#grid'
 };
 
 /* ============================================================ */
@@ -946,7 +983,7 @@ const worksConfig = {
     });
   }
 
-  /* ---- Works Render ---- */
+  /* ---- Works Render — embeds Google Drive folder directly on the website ---- */
   function renderWorksPanel(category, lang){
     const panelId = category === 'motion' ? 'worksMotion' : 'worksEditing';
     const panel = document.getElementById(panelId);
@@ -956,24 +993,15 @@ const worksConfig = {
     const t = content[lang].sections;
     const tagLabel = category === 'motion' ? t.worksTabMotion : t.worksTabEditing;
 
-    if(!items || items.length === 0){
-      panel.innerHTML = `
-        <div class="works-empty reveal">
-          <p>${t.worksDriveLabel}</p>
-          <a class="btn-drive" href="${worksConfig.driveFolderUrl}" target="_blank" rel="noopener">
-            ${t.worksDriveBtn}
-          </a>
-        </div>`;
-    } else {
+    if(items && items.length > 0){
+      /* Individual Drive video embeds (when IDs are added to worksConfig) */
       panel.innerHTML = `<div class="works-grid">${
         items.map(v=>`
           <article class="works-card reveal">
             <div class="works-frame">
               <iframe
                 src="https://drive.google.com/file/d/${v.id}/preview"
-                loading="lazy"
-                allowfullscreen
-                allow="autoplay">
+                loading="lazy" allowfullscreen allow="autoplay">
               </iframe>
             </div>
             <div class="works-info">
@@ -982,9 +1010,17 @@ const worksConfig = {
             </div>
           </article>`).join('')
       }</div>`;
+      panel.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    } else {
+      /* Embed the entire Google Drive folder — videos visible directly on website */
+      panel.innerHTML = `
+        <iframe
+          class="works-folder-embed"
+          src="${worksConfig.driveFolderUrl.replace('drive/folders','embeddedfolderview?id=').replace('?usp=drive_link','').replace('/drive/folders/','')}#grid"
+          frameborder="0"
+          allowfullscreen>
+        </iframe>`;
     }
-    // observe newly added reveal elements
-    panel.querySelectorAll('.reveal').forEach(el => io.observe(el));
   }
 
   function renderWorks(lang){

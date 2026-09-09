@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,7 +60,7 @@
 
   a{ color:inherit; }
 
-  /* ---------- Timeline scrubber (signature element) ---------- */
+  /* ---------- Timeline scrubber ---------- */
   #scrubber{
     position:sticky; top:0; z-index:100;
     background:rgba(21,23,26,0.92);
@@ -219,7 +220,66 @@
   }
   .kf-notes li::before{ content:"—"; position:absolute; left:0; color:var(--muted); }
 
-  /* ---------- Video work ---------- */
+  /* ---------- Works / Portfolio ---------- */
+  .works-tabs{
+    display:flex; margin-bottom:28px;
+    border:1px solid var(--line); border-radius:var(--radius);
+    overflow:hidden; width:fit-content;
+  }
+  .works-tab{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.06em;
+    padding:10px 22px; background:var(--panel); color:var(--muted);
+    border:none; cursor:pointer; transition:background .15s, color .15s;
+  }
+  .works-tab.active{ background:var(--orange); color:#15171a; font-weight:700; }
+  .works-tab:not(:last-child){ border-right:1px solid var(--line); }
+  body.ar .works-tab:not(:last-child){ border-right:none; border-left:1px solid var(--line); }
+
+  .works-panel{ display:none; }
+  .works-panel.active{ display:block; }
+
+  .works-grid{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:18px;
+  }
+  .works-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    overflow:hidden; transition:border-color .2s;
+  }
+  .works-card:hover{ border-color:var(--orange); }
+  .works-frame{
+    aspect-ratio:16/9; background:#0d0f11;
+  }
+  .works-frame iframe{
+    display:block; width:100%; height:100%; border:0;
+  }
+  .works-info{
+    padding:14px 16px; border-top:1px solid var(--line);
+  }
+  .works-info h3{
+    font-size:14px; font-weight:600; margin:0 0 4px;
+  }
+  .works-tag{
+    font-family:'IBM Plex Mono', monospace; font-size:11px;
+    color:var(--orange); letter-spacing:0.06em; text-transform:uppercase;
+  }
+
+  .works-empty{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:18px; padding:56px 32px;
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    text-align:center;
+  }
+  .works-empty p{ color:var(--muted); font-size:14px; margin:0; line-height:1.6; }
+  .btn-drive{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; letter-spacing:0.04em;
+    padding:13px 22px; border-radius:var(--radius); text-decoration:none;
+    display:inline-flex; align-items:center; gap:8px;
+    border:1px solid var(--teal); color:var(--teal); background:var(--teal-dim);
+    transition:background .15s, color .15s, transform .15s;
+  }
+  .btn-drive:hover{ background:var(--teal); color:#15171a; transform:translateY(-2px); }
+
+  /* ---------- Video work (existing) ---------- */
   #videos[hidden]{ display:none; }
   #videos{ padding-top:24px; }
   #videos .eyebrow,
@@ -236,6 +296,7 @@
   .video-frame iframe{
     display:block; width:100%; height:100%; border:0; background:#0d0f11;
   }
+
   /* ---------- Reel / courses as filmstrip ---------- */
   .reel-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
   .reel-card{
@@ -262,7 +323,7 @@
   #contact{ padding-bottom:110px; }
   .export-panel{
     background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
-    padding:32px; 
+    padding:32px;
   }
   .export-head{
     display:flex; justify-content:space-between; align-items:center;
@@ -292,12 +353,29 @@
     font-size:11.5px; color:var(--muted);
   }
 
+  /* ---------- WhatsApp Float ---------- */
+  #wa-float{
+    position:fixed; bottom:28px; right:28px; z-index:999;
+    width:56px; height:56px; border-radius:50%;
+    background:#25D366; color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    text-decoration:none;
+    box-shadow:0 4px 22px rgba(37,211,102,0.45);
+    transition:transform .2s, box-shadow .2s;
+  }
+  #wa-float:hover{
+    transform:scale(1.12);
+    box-shadow:0 6px 32px rgba(37,211,102,0.65);
+  }
+  body.ar #wa-float{ right:auto; left:28px; }
+
   /* reveal-on-scroll */
   .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
   .reveal.in{ opacity:1; transform:translateY(0); }
 
   @media (max-width:760px){
     .video-grid{ grid-template-columns:1fr; }
+    .works-grid{ grid-template-columns:1fr; }
     .reel-grid{ grid-template-columns:1fr; }
     .track-row{ flex-direction:column; }
     .track-label{ width:auto; padding-bottom:6px; }
@@ -306,6 +384,9 @@
     .scrub-brand{ display:none; }
     section{ padding:64px 20px; }
     .export-row{ flex-direction:column; align-items:flex-start; gap:4px; }
+    #wa-float{ bottom:20px; right:20px; width:48px; height:48px; }
+    body.ar #wa-float{ right:auto; left:20px; }
+    .works-empty{ padding:36px 20px; }
   }
 
   body.ar{
@@ -336,7 +417,9 @@
   body.ar .export-head,
   body.ar .export-row .k,
   body.ar footer,
-  body.ar .lang-toggle{
+  body.ar .lang-toggle,
+  body.ar .works-tab,
+  body.ar .btn-drive{
     font-family:'Thmanyah Sans', Tahoma, Arial, sans-serif;
     letter-spacing:0;
   }
@@ -390,6 +473,7 @@
   </p>
   <div class="hero-cta">
     <a class="btn btn-primary" href="#contact">Start a project →</a>
+    <a class="btn btn-ghost" id="ctaWorks" href="#works">View Works</a>
     <a class="btn btn-ghost" href="#experience">See the timeline</a>
   </div>
   <div class="wave" aria-hidden="true">
@@ -479,12 +563,26 @@
   </div>
 </section>
 
+<!-- ===== WORKS / PORTFOLIO SECTION ===== -->
+<section id="works">
+  <span class="eyebrow">// 00:00:22 — Render Queue</span>
+  <h2 class="title">Selected Works</h2>
+
+  <div class="works-tabs" id="worksTabs">
+    <button class="works-tab active" data-tab="motion">▶ MOTION DESIGN</button>
+    <button class="works-tab" data-tab="editing">✂ VIDEO EDITING</button>
+  </div>
+
+  <div id="worksMotion" class="works-panel active"></div>
+  <div id="worksEditing" class="works-panel"></div>
+</section>
+
 <section id="videos" hidden>
   <div class="video-grid" id="videoGrid"></div>
 </section>
 
 <section id="training">
-  <span class="eyebrow">// 00:00:24 — Bin</span>
+  <span class="eyebrow">// 00:00:28 — Bin</span>
   <h2 class="title">Training reel</h2>
   <div class="reel-grid">
     <div class="reel-card reveal">
@@ -509,7 +607,7 @@
 </section>
 
 <section id="education">
-  <span class="eyebrow">// 00:00:30 — Metadata</span>
+  <span class="eyebrow">// 00:00:34 — Metadata</span>
   <h2 class="title">Education</h2>
   <div class="edu-box reveal">
     <div>
@@ -521,7 +619,7 @@
 </section>
 
 <section id="contact">
-  <span class="eyebrow">// 00:00:38 — Export</span>
+  <span class="eyebrow">// 00:00:42 — Export</span>
   <h2 class="title">Let's render something</h2>
   <div class="export-panel reveal">
     <div class="export-head">
@@ -537,6 +635,10 @@
       <span class="v"><a href="tel:+201068199751">+20 106 819 9751</a></span>
     </div>
     <div class="export-row">
+      <span class="k">WHATSAPP</span>
+      <span class="v"><a href="https://wa.me/201068199751" target="_blank" rel="noopener">wa.me/201068199751</a></span>
+    </div>
+    <div class="export-row">
       <span class="k">LOCATION</span>
       <span class="v">Belbis, Sharqia, Egypt</span>
     </div>
@@ -544,16 +646,55 @@
       <span class="k">STATUS</span>
       <span class="v">Available for remote &amp; freelance work</span>
     </div>
-    <a href="mailto:abdallaalshamy60@gmail.com?subject=Let's%20work%20together">
-      <button class="export-go">▶ RENDER PROJECT — CONTACT ME</button>
+    <a href="https://wa.me/201068199751?text=Hi%20Abdallah%2C%20I%27d%20like%20to%20start%20a%20project%20with%20you" target="_blank" rel="noopener">
+      <button class="export-go">▶ RENDER PROJECT — WHATSAPP ME</button>
     </a>
   </div>
 </section>
 
 <footer>ABDALLAH AL-SHAMY · MOTION DESIGNER &amp; VIDEO EDITOR · © 2026</footer>
 
+<!-- ===== WhatsApp Floating Button ===== -->
+<a id="wa-float" href="https://wa.me/201068199751?text=Hi%20Abdallah%2C%20I%27d%20like%20to%20work%20with%20you"
+   target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
 <script src="videos/videos-manifest.js"></script>
 <script>
+
+/* ============================================================
+   WORKS CONFIG — عدّل هنا لتحديث الأعمال
+   ============================================================
+   عشان تضيف فيديو من Google Drive:
+   1. افتح الفيديو على Drive
+   2. انقر مشاركة ← انسخ الرابط
+   3. الرابط شكله: https://drive.google.com/file/d/FILE_ID/view
+   4. انسخ الـ FILE_ID فقط (بين /d/ و /view)
+   5. ضيفه في الـ array المناسب زي المثال بالتعليق
+   ============================================================
+   TO UPDATE WORKS: add the Google Drive File ID to the right array.
+   Get the ID from the share link: drive.google.com/file/d/ID_HERE/view
+   ============================================================ */
+const worksConfig = {
+  motion: [
+    // مثال / Example:
+    // { id: 'GOOGLE_DRIVE_FILE_ID', title: 'Brand Campaign', title_ar: 'حملة براند' },
+    // { id: 'GOOGLE_DRIVE_FILE_ID', title: 'Kinetic Type', title_ar: 'تايبوجرافي متحركة' },
+  ],
+  editing: [
+    // مثال / Example:
+    // { id: 'GOOGLE_DRIVE_FILE_ID', title: 'Reel Edit', title_ar: 'مونتاج ريل' },
+    // { id: 'GOOGLE_DRIVE_FILE_ID', title: 'Brand Video', title_ar: 'فيديو براند' },
+  ],
+  /* رابط فولدر Drive الكامل — يظهر لما ما فيش فيديوهات مضافة */
+  driveFolderUrl: 'https://drive.google.com/drive/folders/1-TKqTgYe_zPrIhFrP77lz3fIvodlpAMI'
+};
+
+/* ============================================================ */
+
   const content = {
     en: {
       title: 'Abdallah Al-shamy — Motion Designer & Video Editor',
@@ -564,17 +705,24 @@
       heroLines: ['ABDALLAH', 'AL-SHAMY'],
       heroRole: '<b>Motion Designer &amp; Video Editor.</b> I cut reels, build kinetic type, and animate ideas that hold attention on autoplay — using After Effects, Premiere Pro and AI tools like Runway ML to turn brand stories into motion.',
       ctaPrimary: 'Start a project →',
+      ctaWorks: 'View Works',
       ctaSecondary: 'See the timeline',
       sections: {
         skillsEyebrow: '// 00:00:08 — Tracks',
         skillsTitle: "What's on the timeline",
         experienceEyebrow: '// 00:00:16 — Keyframes',
         experienceTitle: 'Experience',
-        trainingEyebrow: '// 00:00:24 — Bin',
+        worksEyebrow: '// 00:00:22 — Render Queue',
+        worksTitle: 'Selected Works',
+        worksTabMotion: '▶ MOTION DESIGN',
+        worksTabEditing: '✂ VIDEO EDITING',
+        worksDriveLabel: 'Browse full portfolio on Google Drive',
+        worksDriveBtn: '▶ OPEN PORTFOLIO FOLDER →',
+        trainingEyebrow: '// 00:00:28 — Bin',
         trainingTitle: 'Training reel',
-        educationEyebrow: '// 00:00:30 — Metadata',
+        educationEyebrow: '// 00:00:34 — Metadata',
         educationTitle: 'Education',
-        contactEyebrow: '// 00:00:38 — Export',
+        contactEyebrow: '// 00:00:42 — Export',
         contactTitle: "Let's render something"
       },
       trackLabels: [
@@ -633,10 +781,11 @@
       },
       contact: {
         head: 'EXPORT SETTINGS',
-        keys: ['EMAIL', 'PHONE', 'LOCATION', 'STATUS'],
+        keys: ['EMAIL', 'PHONE', 'WHATSAPP', 'LOCATION', 'STATUS'],
+        whatsapp: 'wa.me/201068199751',
         location: 'Belbis, Sharqia, Egypt',
         status: 'Available for remote & freelance work',
-        button: '▶ RENDER PROJECT — CONTACT ME'
+        button: '▶ RENDER PROJECT — WHATSAPP ME'
       },
       footer: 'ABDALLAH AL-SHAMY · MOTION DESIGNER & VIDEO EDITOR · © 2026'
     },
@@ -649,17 +798,24 @@
       heroLines: ['عبدالله', 'الشامي'],
       heroRole: '<b>موشن ديزاينر ومونتير فيديو.</b> أصمم ريلز، تايبوجرافي متحركة، وأفكار بصرية تشد الانتباه من أول ثانية — باستخدام After Effects وPremiere Pro وأدوات الذكاء الاصطناعي مثل Runway ML لتحويل قصص البراندات إلى حركة.',
       ctaPrimary: 'ابدأ مشروع →',
+      ctaWorks: 'شاهد الأعمال',
       ctaSecondary: 'شاهد التايملاين',
       sections: {
         skillsEyebrow: '// 00:00:08 — المسارات',
         skillsTitle: 'موجود إيه على التايملاين',
         experienceEyebrow: '// 00:00:16 — الكي فريمز',
         experienceTitle: 'الخبرات',
-        trainingEyebrow: '// 00:00:24 — التدريب',
+        worksEyebrow: '// 00:00:22 — قائمة التصدير',
+        worksTitle: 'أعمال مختارة',
+        worksTabMotion: '▶ موشن ديزاين',
+        worksTabEditing: '✂ مونتاج فيديو',
+        worksDriveLabel: 'تصفح كل الأعمال على Google Drive',
+        worksDriveBtn: '▶ فتح فولدر الأعمال ←',
+        trainingEyebrow: '// 00:00:28 — التدريب',
         trainingTitle: 'تدريبات ومهارات',
-        educationEyebrow: '// 00:00:30 — البيانات',
+        educationEyebrow: '// 00:00:34 — البيانات',
         educationTitle: 'التعليم',
-        contactEyebrow: '// 00:00:38 — التصدير',
+        contactEyebrow: '// 00:00:42 — التصدير',
         contactTitle: 'خلينا نرندر مشروع جديد'
       },
       trackLabels: [
@@ -718,10 +874,11 @@
       },
       contact: {
         head: 'إعدادات التصدير',
-        keys: ['البريد الإلكتروني', 'الهاتف', 'الموقع', 'الحالة'],
+        keys: ['البريد الإلكتروني', 'الهاتف', 'واتساب', 'الموقع', 'الحالة'],
+        whatsapp: 'wa.me/201068199751',
         location: 'بلبيس، الشرقية، مصر',
         status: 'متاح للعمل عن بعد والمشاريع الحرة',
-        button: '▶ رندر المشروع — تواصل معي'
+        button: '▶ رندر المشروع — تواصل عبر واتساب'
       },
       footer: 'عبدالله الشامي · موشن ديزاينر ومونتير فيديو · © 2026'
     }
@@ -743,13 +900,14 @@
 
   // scrubber ticks matched to sections
   const sections = [
-    {id:'hero', tc:'00:00:00:00', labels:{en:'INTRO', ar:'البداية'}},
-    {id:'skills', tc:'00:00:08:00', labels:{en:'TRACKS', ar:'المهارات'}},
-    {id:'experience', tc:'00:00:16:00', labels:{en:'WORK', ar:'العمل'}},
-    ...(portfolioVideos.length ? [{id:'videos', tc:'00:00:22:00', labels:{en:'VIDEOS', ar:'فيديوهات'}}] : []),
-    {id:'training', tc:'00:00:24:00', labels:{en:'TRAINING', ar:'التدريب'}},
-    {id:'education', tc:'00:00:30:00', labels:{en:'EDU', ar:'التعليم'}},
-    {id:'contact', tc:'00:00:38:00', labels:{en:'CONTACT', ar:'تواصل'}},
+    {id:'hero',       tc:'00:00:00:00', labels:{en:'INTRO',    ar:'البداية'}},
+    {id:'skills',     tc:'00:00:08:00', labels:{en:'TRACKS',   ar:'المهارات'}},
+    {id:'experience', tc:'00:00:16:00', labels:{en:'WORK',     ar:'العمل'}},
+    {id:'works',      tc:'00:00:22:00', labels:{en:'WORKS',    ar:'الأعمال'}},
+    ...(portfolioVideos.length ? [{id:'videos', tc:'00:00:25:00', labels:{en:'VIDEOS', ar:'فيديوهات'}}] : []),
+    {id:'training',   tc:'00:00:28:00', labels:{en:'TRAINING', ar:'التدريب'}},
+    {id:'education',  tc:'00:00:34:00', labels:{en:'EDU',      ar:'التعليم'}},
+    {id:'contact',    tc:'00:00:42:00', labels:{en:'CONTACT',  ar:'تواصل'}},
   ];
   const track = document.getElementById('scrubTrack');
   const playhead = document.getElementById('playhead');
@@ -775,12 +933,10 @@
     const el = document.querySelector(selector);
     if(el) el.textContent = value;
   }
-
   function setHTML(selector, value){
     const el = document.querySelector(selector);
     if(el) el.innerHTML = value;
   }
-
   function renderList(listEl, items){
     if(!listEl) return;
     listEl.innerHTML = '';
@@ -791,25 +947,74 @@
     });
   }
 
-  function getLocalized(value, lang){
-    if(typeof value === 'string') return value;
-    return value?.[lang] || value?.en || '';
+  /* ---- Works Render ---- */
+  function renderWorksPanel(category, lang){
+    const panelId = category === 'motion' ? 'worksMotion' : 'worksEditing';
+    const panel = document.getElementById(panelId);
+    if(!panel) return;
+
+    const items = worksConfig[category];
+    const t = content[lang].sections;
+    const tagLabel = category === 'motion' ? t.worksTabMotion : t.worksTabEditing;
+
+    if(!items || items.length === 0){
+      panel.innerHTML = `
+        <div class="works-empty reveal">
+          <p>${t.worksDriveLabel}</p>
+          <a class="btn-drive" href="${worksConfig.driveFolderUrl}" target="_blank" rel="noopener">
+            ${t.worksDriveBtn}
+          </a>
+        </div>`;
+    } else {
+      panel.innerHTML = `<div class="works-grid">${
+        items.map(v=>`
+          <article class="works-card reveal">
+            <div class="works-frame">
+              <iframe
+                src="https://drive.google.com/file/d/${v.id}/preview"
+                loading="lazy"
+                allowfullscreen
+                allow="autoplay">
+              </iframe>
+            </div>
+            <div class="works-info">
+              <h3>${(lang === 'ar' && v.title_ar) ? v.title_ar : v.title}</h3>
+              <span class="works-tag">${tagLabel}</span>
+            </div>
+          </article>`).join('')
+      }</div>`;
+    }
+    // observe newly added reveal elements
+    panel.querySelectorAll('.reveal').forEach(el => io.observe(el));
   }
 
+  function renderWorks(lang){
+    renderWorksPanel('motion', lang);
+    renderWorksPanel('editing', lang);
+  }
+
+  /* ---- Tab Switcher ---- */
+  document.getElementById('worksTabs').addEventListener('click', e=>{
+    const btn = e.target.closest('.works-tab');
+    if(!btn) return;
+    const tab = btn.dataset.tab;
+    document.querySelectorAll('.works-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    document.querySelectorAll('.works-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(tab === 'motion' ? 'worksMotion' : 'worksEditing').classList.add('active');
+  });
+
+  /* ---- Videos (existing manifest system) ---- */
   function renderVideos(lang){
     const section = document.getElementById('videos');
     const grid = document.getElementById('videoGrid');
     if(!section || !grid) return;
     section.hidden = portfolioVideos.length === 0;
     grid.innerHTML = '';
-
     portfolioVideos.forEach(video=>{
       const card = document.createElement('article');
       card.className = 'video-card reveal';
-
       const frame = document.createElement('div');
       frame.className = 'video-frame';
-
       if(video.type === 'youtube' || video.type === 'vimeo'){
         const iframe = document.createElement('iframe');
         iframe.src = video.src;
@@ -826,12 +1031,12 @@
         player.preload = 'metadata';
         frame.appendChild(player);
       }
-
       card.append(frame);
       grid.appendChild(card);
     });
   }
 
+  /* ---- setLang ---- */
   function setLang(lang){
     currentLang = lang;
     const t = content[lang];
@@ -842,20 +1047,25 @@
     document.title = t.title;
 
     setText('.scrub-brand', t.brand);
-    setText('.rec', t.live);
     const rec = document.querySelector('.rec');
-    if(rec) rec.insertAdjacentHTML('afterbegin', '<span class="rec-dot"></span> ');
+    if(rec){ rec.innerHTML = '<span class="rec-dot"></span> ' + t.live; }
     setText('.hero-tc-row > span:last-child', t.location);
     document.querySelectorAll('.hero-title .line span').forEach((el, i)=>{ el.textContent = t.heroLines[i]; });
     setHTML('.hero-role', t.heroRole);
     setText('.btn-primary', t.ctaPrimary);
-    setText('.btn-ghost', t.ctaSecondary);
+    setText('#ctaWorks', t.ctaWorks);
+    setText('.btn-ghost:last-of-type', t.ctaSecondary);
     langToggle.textContent = t.langButton;
 
     setText('#skills .eyebrow', t.sections.skillsEyebrow);
     setText('#skills .title', t.sections.skillsTitle);
     setText('#experience .eyebrow', t.sections.experienceEyebrow);
     setText('#experience .title', t.sections.experienceTitle);
+    setText('#works .eyebrow', t.sections.worksEyebrow);
+    setText('#works .title', t.sections.worksTitle);
+    document.querySelectorAll('.works-tab').forEach((btn, i)=>{
+      btn.textContent = i === 0 ? t.sections.worksTabMotion : t.sections.worksTabEditing;
+    });
     setText('#training .eyebrow', t.sections.trainingEyebrow);
     setText('#training .title', t.sections.trainingTitle);
     setText('#education .eyebrow', t.sections.educationEyebrow);
@@ -883,7 +1093,6 @@
       card.querySelector('.reel-org').textContent = data[2];
       card.querySelector('.reel-desc').textContent = data[3];
     });
-    renderVideos(lang);
 
     setText('#education .kf-time', t.education.time);
     setText('#education .kf-role', t.education.degree);
@@ -891,24 +1100,31 @@
 
     setText('.export-head > span:first-child', t.contact.head);
     document.querySelectorAll('.export-row .k').forEach((el, i)=>{ el.textContent = t.contact.keys[i]; });
-    setText('.export-row:nth-of-type(4) .v', t.contact.location);
-    setText('.export-row:nth-of-type(5) .v', t.contact.status);
-    setText('.export-go', t.contact.button);
-    setText('footer', t.footer);
 
     tickEls.forEach((tick, i)=>{
       const label = tick.el.querySelector('span:last-child');
       if(label) label.textContent = sections[i].labels[lang];
     });
+
+    renderVideos(lang);
+    renderWorks(lang);
   }
 
+  /* ---- Intersection Observer (defined before setLang call) ---- */
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:0.15});
+  document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
+
+  /* ---- Init ---- */
   langToggle.addEventListener('click', ()=>{
     setLang(currentLang === 'en' ? 'ar' : 'en');
   });
   setLang(currentLang);
 
+  /* ---- Scroll / Scrubber ---- */
   function frameToTC(scrollFraction){
-    const totalFrames = 45; // arbitrary stylised total (00:00:45:00)
+    const totalFrames = 48;
     const f = Math.min(totalFrames, Math.floor(scrollFraction*totalFrames));
     const secs = Math.floor(f/1);
     const hh = '00', mm = '00';
@@ -924,12 +1140,10 @@
     const frac = Math.max(0, Math.min(1, scrollTop/scrollH));
     playhead.style.left = (frac*100)+'%';
     tcDisplay.textContent = frameToTC(frac);
-
-    // active tick = last tick whose section top has passed viewport top+120
     let activeIdx = 0;
     sections.forEach((s,i)=>{
       const el = document.getElementById(s.id);
-      if(el.getBoundingClientRect().top < 140) activeIdx = i;
+      if(el && el.getBoundingClientRect().top < 140) activeIdx = i;
     });
     tickEls.forEach((t,i)=> t.el.classList.toggle('active', i===activeIdx));
   }
@@ -937,13 +1151,6 @@
   window.addEventListener('resize', onScroll);
   onScroll();
 
-  // reveal on scroll
-  const revealEls = document.querySelectorAll('.reveal');
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, {threshold:0.15});
-  revealEls.forEach(el=> io.observe(el));
 </script>
-
 </body>
 </html>

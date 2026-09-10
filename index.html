@@ -1190,18 +1190,23 @@ const worksConfig = {
     });
   }
 
-  window.pauseCardVideo = function(vid){
+  window.togglePauseCardVideo = function(vid, btn){
     const frame = document.getElementById('frame-' + vid);
     if(!frame) return;
     const video = frame.querySelector('video');
-    if(video){ try{ video.pause(); }catch(e){} }
+    if(video){
+      if(video.paused){
+        video.play();
+        if(btn) btn.innerHTML = '⏸ ' + (currentLang === 'ar' ? 'إيقاف' : 'Pause');
+      }else{
+        video.pause(); // Pauses at the exact current frame without resetting to beginning!
+        if(btn) btn.innerHTML = '▶ ' + (currentLang === 'ar' ? 'تشغيل' : 'Play');
+      }
+      return;
+    }
     const iframe = frame.querySelector('iframe');
     if(iframe){
-      try{
-        const src = iframe.src;
-        iframe.src = '';
-        iframe.src = src;
-      }catch(e){}
+      openVideoModal(vid, '', 'https://drive.google.com/file/d/' + vid + '/view', currentLang);
     }
   };
 
@@ -1214,7 +1219,7 @@ const worksConfig = {
     const closeModalText = document.getElementById('closeModalText');
     if(!modal || !modalBody) return;
 
-    modalTitle.textContent = title;
+    if(modalTitle) modalTitle.textContent = title || (lang === 'ar' ? 'معاينة الفيديو' : 'Video Preview');
     closeModalText.textContent = lang === 'ar' ? 'إيقاف وإغلاق' : 'Pause & Close';
     if(modalLink){
       modalLink.textContent = lang === 'ar' ? 'Drive ↗' : 'Drive ↗';
@@ -1269,8 +1274,6 @@ const worksConfig = {
     if(items && items.length > 0){
       panel.innerHTML = `<div class="works-grid">${
         items.map(v=>{
-          const title = (lang === 'ar' && v.title_ar) ? v.title_ar : v.title;
-          const safeTitle = title.replace(/'/g, "\\'");
           const driveViewUrl = `https://drive.google.com/file/d/${v.id}/view`;
           const pauseBtnText = lang === 'ar' ? 'إيقاف' : 'Pause';
           const expandBtnText = lang === 'ar' ? 'تكبير' : 'Expand';
@@ -1284,14 +1287,13 @@ const worksConfig = {
             </div>
             <div class="works-info">
               <div class="works-info-text">
-                <h3>${title}</h3>
                 <span class="works-tag">${tagLabel}</span>
               </div>
               <div class="works-actions">
-                <button class="btn-pause-inline" onclick="pauseCardVideo('${v.id}')" title="${pauseBtnText}">
+                <button class="btn-pause-inline" onclick="togglePauseCardVideo('${v.id}', this)" title="${pauseBtnText}">
                   ⏸ ${pauseBtnText}
                 </button>
-                <button class="btn-expand-modal" onclick="openVideoModal('${v.id}', '${safeTitle}', '${driveViewUrl}', '${lang}')" title="${expandBtnText}">
+                <button class="btn-expand-modal" onclick="openVideoModal('${v.id}', '', '${driveViewUrl}', '${lang}')" title="${expandBtnText}">
                   ⛶ ${expandBtnText}
                 </button>
                 <a href="${driveViewUrl}" target="_blank" rel="noopener" class="works-link-btn">

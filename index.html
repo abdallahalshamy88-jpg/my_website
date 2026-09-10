@@ -313,14 +313,15 @@
   .works-frame{
     aspect-ratio:16/9; background:#0d0f11;
   }
-  .works-frame iframe{
-    display:block; width:100%; height:100%; border:0;
+  .works-frame iframe,
+  .works-frame video{
+    display:block; width:100%; height:100%; border:0; background:#0d0f11; object-fit:cover;
   }
   .works-info{
     padding:14px 16px; border-top:1px solid var(--line);
-    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
   }
-  .works-info-text{ flex:1; min-width:0; }
+  .works-info-text{ flex:1; min-width:120px; }
   .works-info h3{
     font-size:14px; font-weight:600; margin:0 0 4px;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
@@ -329,14 +330,86 @@
     font-family:'IBM Plex Mono', monospace; font-size:11px;
     color:var(--orange); letter-spacing:0.06em; text-transform:uppercase;
   }
+  .works-actions{
+    display:flex; gap:6px; align-items:center; flex-wrap:wrap;
+  }
+  .btn-pause-inline{
+    font-family:'IBM Plex Mono', monospace; font-size:11px;
+    padding:6px 10px; border-radius:var(--radius);
+    border:1px solid rgba(255,107,74,0.4); color:var(--orange); background:var(--orange-dim);
+    cursor:pointer; transition:all .15s; display:inline-flex; align-items:center; gap:4px;
+  }
+  .btn-pause-inline:hover{
+    background:var(--orange); color:#15171a;
+  }
+  .btn-expand-modal{
+    font-family:'IBM Plex Mono', monospace; font-size:11px;
+    padding:6px 10px; border-radius:var(--radius);
+    border:1px solid var(--line); color:var(--text); background:var(--panel-2);
+    cursor:pointer; transition:all .15s; display:inline-flex; align-items:center; gap:4px;
+  }
+  .btn-expand-modal:hover{
+    border-color:var(--teal); color:var(--teal); background:var(--teal-dim);
+  }
   .works-link-btn{
     font-family:'IBM Plex Mono', monospace; font-size:11px;
-    padding:6px 12px; border-radius:var(--radius);
+    padding:6px 10px; border-radius:var(--radius);
     border:1px solid var(--line); color:var(--text); text-decoration:none;
     white-space:nowrap; transition:all .15s; background:var(--panel-2);
   }
   .works-link-btn:hover{
     border-color:var(--orange); color:var(--orange); background:var(--orange-dim);
+  }
+
+  /* Video Lightbox Modal */
+  #video-modal{
+    position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:10000;
+    background:rgba(10,12,14,0.92); backdrop-filter:blur(10px);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+    padding:20px; box-sizing:border-box;
+  }
+  #video-modal.active{
+    opacity:1; pointer-events:auto;
+  }
+  .video-modal-content{
+    width:100%; max-width:900px; background:var(--panel); border:1px solid var(--line);
+    border-radius:14px; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,0.8);
+    display:flex; flex-direction:column; animation:modalPop .25s ease;
+  }
+  @keyframes modalPop{
+    from{ transform:scale(0.95); opacity:0; }
+    to{ transform:scale(1); opacity:1; }
+  }
+  .video-modal-header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 20px; background:#121417; border-bottom:1px solid var(--line);
+  }
+  .video-modal-title{
+    font-size:15px; font-weight:600; color:var(--text); margin:0;
+  }
+  .video-modal-close{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; font-weight:600;
+    padding:8px 16px; border-radius:var(--radius); background:var(--orange); color:#15171a;
+    border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px;
+    transition:transform .15s, background .15s;
+  }
+  .video-modal-close:hover{
+    transform:scale(1.04); background:#ff8266;
+  }
+  .video-modal-body{
+    aspect-ratio:16/9; width:100%; background:#000; position:relative;
+  }
+  .video-modal-body video,
+  .video-modal-body iframe{
+    width:100%; height:100%; border:none; display:block;
+  }
+  .video-modal-footer{
+    padding:12px 20px; background:#121417; border-top:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  }
+  .video-modal-hint{
+    font-size:12px; color:var(--muted); font-family:'IBM Plex Mono', monospace;
   }
 
   .works-empty{
@@ -777,6 +850,25 @@
   </a>
 </div>
 
+<!-- ===== Video Lightbox Modal ===== -->
+<div id="video-modal" aria-hidden="true">
+  <div class="video-modal-content">
+    <div class="video-modal-header">
+      <h3 class="video-modal-title" id="videoModalTitle">عنوان الفيديو</h3>
+      <button class="video-modal-close" id="closeVideoModalBtn">
+        <span>✕</span> <span id="closeModalText">إيقاف وإغلاق</span>
+      </button>
+    </div>
+    <div class="video-modal-body" id="videoModalBody"></div>
+    <div class="video-modal-footer">
+      <span class="video-modal-hint">💡 اضغط في أي مكان أو Esc لإيقاف الفيديو وإغلاقه</span>
+      <a id="videoModalDriveLink" href="#" target="_blank" rel="noopener" class="works-link-btn">
+        المشروع على Drive ↗
+      </a>
+    </div>
+  </div>
+</div>
+
 <!-- ===== Videos Manifest ===== -->
 <script src="videos/videos-manifest.js"></script>
 <script>
@@ -1084,7 +1176,87 @@ const worksConfig = {
     });
   }
 
-  /* ---- Works Render — embeds Google Drive folder directly on the website ---- */
+  /* ---- Global Video Control & Lightbox Modal ---- */
+  function pauseAllVideos(){
+    document.querySelectorAll('video').forEach(v=>{
+      try{ v.pause(); }catch(e){}
+    });
+    document.querySelectorAll('.works-frame iframe').forEach(iframe=>{
+      try{
+        const src = iframe.src;
+        iframe.src = '';
+        iframe.src = src;
+      }catch(e){}
+    });
+  }
+
+  window.pauseCardVideo = function(vid){
+    const frame = document.getElementById('frame-' + vid);
+    if(!frame) return;
+    const video = frame.querySelector('video');
+    if(video){ try{ video.pause(); }catch(e){} }
+    const iframe = frame.querySelector('iframe');
+    if(iframe){
+      try{
+        const src = iframe.src;
+        iframe.src = '';
+        iframe.src = src;
+      }catch(e){}
+    }
+  };
+
+  window.openVideoModal = function(vid, title, driveUrl, lang){
+    pauseAllVideos();
+    const modal = document.getElementById('video-modal');
+    const modalTitle = document.getElementById('videoModalTitle');
+    const modalBody = document.getElementById('videoModalBody');
+    const modalLink = document.getElementById('videoModalDriveLink');
+    const closeModalText = document.getElementById('closeModalText');
+    if(!modal || !modalBody) return;
+
+    modalTitle.textContent = title;
+    closeModalText.textContent = lang === 'ar' ? 'إيقاف وإغلاق' : 'Pause & Close';
+    if(modalLink){
+      modalLink.textContent = lang === 'ar' ? 'Drive ↗' : 'Drive ↗';
+      modalLink.href = driveUrl;
+    }
+
+    modalBody.innerHTML = '';
+    const video = document.createElement('video');
+    video.controls = true;
+    video.autoplay = true;
+    video.playsInline = true;
+    video.src = `https://drive.google.com/uc?export=download&id=${vid}`;
+    video.onerror = function(){
+      modalBody.innerHTML = `<iframe src="https://drive.google.com/file/d/${vid}/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+    };
+    modalBody.appendChild(video);
+
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+  };
+
+  window.closeVideoModal = function(){
+    const modal = document.getElementById('video-modal');
+    const modalBody = document.getElementById('videoModalBody');
+    if(modal){
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+    if(modalBody){
+      modalBody.innerHTML = '';
+    }
+  };
+
+  document.getElementById('closeVideoModalBtn')?.addEventListener('click', window.closeVideoModal);
+  document.getElementById('video-modal')?.addEventListener('click', function(e){
+    if(e.target.id === 'video-modal') window.closeVideoModal();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') window.closeVideoModal();
+  });
+
+  /* ---- Works Render — embeds Google Drive / HTML5 video player ---- */
   function renderWorksPanel(category, lang){
     const panelId = category === 'motion' ? 'worksMotion' : 'worksEditing';
     const panel = document.getElementById(panelId);
@@ -1095,30 +1267,43 @@ const worksConfig = {
     const tagLabel = category === 'motion' ? t.worksTabMotion : t.worksTabEditing;
 
     if(items && items.length > 0){
-      /* Individual Drive video embeds (when IDs are added to worksConfig) */
       panel.innerHTML = `<div class="works-grid">${
-        items.map(v=>`
+        items.map(v=>{
+          const title = (lang === 'ar' && v.title_ar) ? v.title_ar : v.title;
+          const safeTitle = title.replace(/'/g, "\\'");
+          const driveViewUrl = `https://drive.google.com/file/d/${v.id}/view`;
+          const pauseBtnText = lang === 'ar' ? 'إيقاف' : 'Pause';
+          const expandBtnText = lang === 'ar' ? 'تكبير' : 'Expand';
+          return `
           <article class="works-card reveal">
-            <div class="works-frame">
-              <iframe
-                src="https://drive.google.com/file/d/${v.id}/preview"
-                loading="lazy" allowfullscreen allow="autoplay">
-              </iframe>
+            <div class="works-frame" id="frame-${v.id}">
+              <video controls playsinline preload="metadata"
+                src="https://drive.google.com/uc?export=download&id=${v.id}"
+                onerror="this.outerHTML='<iframe src=\\'https://drive.google.com/file/d/${v.id}/preview\\' loading=\\'lazy\\' allowfullscreen allow=\\'autoplay\\'></iframe>'">
+              </video>
             </div>
             <div class="works-info">
               <div class="works-info-text">
-                <h3>${(lang === 'ar' && v.title_ar) ? v.title_ar : v.title}</h3>
+                <h3>${title}</h3>
                 <span class="works-tag">${tagLabel}</span>
               </div>
-              <a href="https://drive.google.com/file/d/${v.id}/view" target="_blank" rel="noopener" class="works-link-btn">
-                ${lang === 'ar' ? 'المشروع ↗' : 'Project ↗'}
-              </a>
+              <div class="works-actions">
+                <button class="btn-pause-inline" onclick="pauseCardVideo('${v.id}')" title="${pauseBtnText}">
+                  ⏸ ${pauseBtnText}
+                </button>
+                <button class="btn-expand-modal" onclick="openVideoModal('${v.id}', '${safeTitle}', '${driveViewUrl}', '${lang}')" title="${expandBtnText}">
+                  ⛶ ${expandBtnText}
+                </button>
+                <a href="${driveViewUrl}" target="_blank" rel="noopener" class="works-link-btn">
+                  Drive ↗
+                </a>
+              </div>
             </div>
-          </article>`).join('')
+          </article>`;
+        }).join('')
       }</div>`;
       panel.querySelectorAll('.reveal').forEach(el => io.observe(el));
     } else {
-      /* No video IDs configured yet — show a clean Drive link card */
       const t = content[lang].sections;
       panel.innerHTML = `
         <div class="works-empty reveal">
@@ -1144,6 +1329,7 @@ const worksConfig = {
   document.getElementById('worksTabs').addEventListener('click', e=>{
     const btn = e.target.closest('.works-tab');
     if(!btn) return;
+    pauseAllVideos();
     const tab = btn.dataset.tab;
     document.querySelectorAll('.works-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
     document.querySelectorAll('.works-panel').forEach(p => p.classList.remove('active'));

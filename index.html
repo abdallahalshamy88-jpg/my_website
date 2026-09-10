@@ -480,23 +480,7 @@
     transform: translateY(0) !important;
   }
 
-  /* Real Arabic Kashida Extension (Tatweel animation without squash & stretch) */
-  .k-dash{
-    display:inline-block;
-    overflow:hidden;
-    width:0.1em;
-    vertical-align:baseline;
-    transition:width 0.4s cubic-bezier(0.16,1,0.3,1);
-    animation: kashidaMotion 3.8s ease-in-out infinite alternate 1.2s;
-  }
-  @keyframes kashidaMotion{
-    0%{ width:0.08em; }
-    50%{ width:0.48em; }
-    100%{ width:0.08em; }
-  }
-  .hero-title:hover .k-dash{
-    width:0.65em !important;
-  }
+
   body.ar .mono,
   body.ar .eyebrow,
   body.ar .hero-tc-row,
@@ -1156,17 +1140,6 @@ const worksConfig = {
     });
   }
 
-  function formatKashida(text, lang){
-    if(lang !== 'ar') return text;
-    if(text === 'عبدالله'){
-      return 'ع<span class="k-dash">ـ</span>ب<span class="k-dash">ـ</span>د<span class="k-dash">ـ</span>ا<span class="k-dash">ـ</span>ل<span class="k-dash">ـ</span>ل<span class="k-dash">ـ</span>ه';
-    }
-    if(text === 'الشامي'){
-      return 'ا<span class="k-dash">ـ</span>ل<span class="k-dash">ـ</span>ش<span class="k-dash">ـ</span>ا<span class="k-dash">ـ</span>م<span class="k-dash">ـ</span>ي';
-    }
-    return text;
-  }
-
   /* ---- setLang ---- */
   function setLang(lang){
     currentLang = lang;
@@ -1181,7 +1154,7 @@ const worksConfig = {
     const rec = document.querySelector('.rec');
     if(rec){ rec.innerHTML = '<span class="rec-dot"></span> ' + t.live; }
     setText('.hero-tc-row > span:last-child', t.location);
-    document.querySelectorAll('.hero-title .line span').forEach((el, i)=>{ el.innerHTML = formatKashida(t.heroLines[i], lang); });
+    document.querySelectorAll('.hero-title .line span').forEach((el, i)=>{ el.textContent = t.heroLines[i]; });
     setHTML('.hero-role', t.heroRole);
     setText('.btn-primary', t.ctaPrimary);
     setText('#ctaWorks', t.ctaWorks);

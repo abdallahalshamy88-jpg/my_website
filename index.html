@@ -137,15 +137,14 @@
   .hero-content{ flex:1; min-width:0; }
   .hero-photo{
     flex-shrink:0;
-    width:240px;
-    height:300px;
-    border-radius:16px;
+    width:270px;
+    height:380px;
+    border-radius:18px;
     overflow:hidden;
     border:1px solid var(--line);
-    box-shadow:0 16px 40px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,122,69,0.25);
+    box-shadow:0 20px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,122,69,0.3);
     position:relative;
     margin-top:4px;
-    align-self:flex-start;
     background:var(--panel);
   }
   .hero-photo::before{
@@ -156,13 +155,13 @@
   .hero-photo img{
     width:100%; height:100%;
     object-fit:cover;
-    object-position:center 12%;
+    object-position:center top;
     display:block;
-    filter:grayscale(100%) contrast(1.05);
+    filter:grayscale(100%) contrast(1.06);
     transition:transform 0.5s cubic-bezier(0.16,1,0.3,1), filter 0.5s ease;
   }
   .hero-photo:hover img{
-    transform:scale(1.05);
+    transform:scale(1.04);
     filter:grayscale(0%) contrast(1.05);
   }
   .hero-tc-row{
@@ -470,7 +469,7 @@
     body.ar #wa-float{ right:auto; left:20px; }
     .works-folder-embed{ height:380px; }
     .hero-layout{ flex-direction:column-reverse; gap:28px; }
-    .hero-photo{ width:200px; height:250px; margin:0 auto; align-self:center; border-radius:14px; }
+    .hero-photo{ width:100%; max-width:260px; height:340px; margin:0 auto; align-self:center; border-radius:16px; }
   }
 
   body.ar{
@@ -577,7 +576,7 @@
       </div>
     </div>
     <div class="hero-photo">
-      <img src="./images/profile.png" alt="Abdallah Al-Shamy — Motion Designer" />
+      <img src="./images/profile.png?v=3" alt="Abdallah Al-Shamy — Motion Designer" />
     </div>
   </div>
 </section>

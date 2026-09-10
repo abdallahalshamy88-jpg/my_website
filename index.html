@@ -454,45 +454,7 @@
   }
   #wa-float:hover{ box-shadow:0 6px 32px rgba(37,211,102,0.65); }
   #ig-float:hover{ box-shadow:0 6px 32px rgba(214,36,159,0.65); }
-  /* ---------- Glowing Easy-Ease Keyframe Mouse Tracker ---------- */
-  #cursor-dot, #cursor-glow {
-    pointer-events: none;
-    position: fixed;
-    top: 0; left: 0;
-    z-index: 99999;
-    will-change: transform;
-  }
-  #cursor-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--orange);
-    box-shadow: 0 0 12px var(--orange), 0 0 24px var(--orange);
-    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-  }
-  #cursor-glow {
-    width: 44px; height: 44px;
-    border-radius: 8px;
-    border: 2px solid rgba(255, 122, 69, 0.8);
-    background: radial-gradient(circle, rgba(255,122,69,0.25) 0%, rgba(24,26,29,0.4) 60%, transparent 90%);
-    box-shadow: 0 0 30px rgba(255, 122, 69, 0.55), inset 0 0 14px rgba(255, 122, 69, 0.3);
-    transition: width 0.3s cubic-bezier(0.16,1,0.3,1), height 0.3s cubic-bezier(0.16,1,0.3,1), background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, border-radius 0.3s ease;
-  }
-  body.cursor-hover #cursor-glow {
-    width: 68px; height: 68px;
-    border-color: var(--teal);
-    border-radius: 12px;
-    background: radial-gradient(circle, rgba(47,214,196,0.3) 0%, rgba(255,122,69,0.12) 70%, transparent 90%);
-    box-shadow: 0 0 45px rgba(47, 214, 196, 0.65), inset 0 0 20px rgba(47, 214, 196, 0.4);
-  }
-  body.cursor-hover #cursor-dot {
-    transform: translate(-50%, -50%) scale(1.6);
-    background: var(--teal);
-    box-shadow: 0 0 16px var(--teal), 0 0 32px var(--teal);
-  }
-  @media (pointer: coarse) {
-    #cursor-dot, #cursor-glow { display: none !important; }
-  }
+
 
   /* Works folder embed */
   .works-folder-embed{
@@ -815,10 +777,7 @@
   </a>
 </div>
 
-<!-- ===== Glowing Mouse Tracker ===== -->
-<div id="cursor-dot"></div>
-<div id="cursor-glow"></div>
-
+<!-- ===== Videos Manifest ===== -->
 <script src="videos/videos-manifest.js"></script>
 <script>
 
@@ -1333,53 +1292,10 @@ const worksConfig = {
       const el = document.getElementById(s.id);
       if(el && el.getBoundingClientRect().top < 140) activeIdx = i;
     });
-    tickEls.forEach((t,i)=> t.el.classList.toggle('active', i===activeIdx));
-    currentScrollFrac = frac;
   }
   document.addEventListener('scroll', onScroll, {passive:true});
   window.addEventListener('resize', onScroll);
-
-  /* ---- Glowing Easy Ease Keyframe Mouse Tracker ---- */
-  const cDot = document.getElementById('cursor-dot');
-  const cGlow = document.getElementById('cursor-glow');
-  let mX = -100, mY = -100;
-  let gX = -100, gY = -100;
-  let isMoving = false;
-  let currentScrollFrac = 0;
-
-  window.addEventListener('mousemove', e => {
-    mX = e.clientX;
-    mY = e.clientY;
-    if(!isMoving){
-      gX = mX; gY = mY;
-      isMoving = true;
-    }
-    cDot.style.left = mX + 'px';
-    cDot.style.top = mY + 'px';
-  });
-
-  function animCursor(){
-    gX += (mX - gX) * 0.15;
-    gY += (mY - gY) * 0.15;
-    const rot = 45 + (currentScrollFrac * 720);
-    cGlow.style.left = gX + 'px';
-    cGlow.style.top = gY + 'px';
-    cGlow.style.transform = 'translate(-50%, -50%) rotate(' + rot + 'deg)';
-    requestAnimationFrame(animCursor);
-  }
-  requestAnimationFrame(animCursor);
   onScroll();
-
-  document.addEventListener('mouseover', e => {
-    if(e.target.closest('a, button, .works-card, .works-tab, .hero-title, .hero-photo, .lang-toggle, .btn')){
-      document.body.classList.add('cursor-hover');
-    }
-  });
-  document.addEventListener('mouseout', e => {
-    if(e.target.closest('a, button, .works-card, .works-tab, .hero-title, .hero-photo, .lang-toggle, .btn')){
-      document.body.classList.remove('cursor-hover');
-    }
-  });
 
 </script>
 </body>

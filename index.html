@@ -311,7 +311,13 @@
   }
   .works-card:hover{ border-color:var(--orange); }
   .works-frame{
-    aspect-ratio:16/9; background:#0d0f11;
+    aspect-ratio:16/9; background:#0d0f11; position:relative; overflow:hidden;
+  }
+  /* Block Google Drive top-right popout icon so mobile users stay on website */
+  .works-frame::after,
+  .video-modal-body::after{
+    content:""; position:absolute; top:0; right:0; width:64px; height:64px;
+    z-index:10; pointer-events:auto; background:transparent;
   }
   .works-frame iframe,
   .works-frame video{
@@ -862,9 +868,6 @@
     <div class="video-modal-body" id="videoModalBody"></div>
     <div class="video-modal-footer">
       <span class="video-modal-hint">💡 اضغط في أي مكان أو Esc لإيقاف الفيديو وإغلاقه</span>
-      <a id="videoModalDriveLink" href="#" target="_blank" rel="noopener" class="works-link-btn">
-        المشروع على Drive ↗
-      </a>
     </div>
   </div>
 </div>
@@ -1178,10 +1181,7 @@ const worksConfig = {
 
   /* ---- Global Video Control & Lightbox Modal ---- */
   function pauseAllVideos(){
-    document.querySelectorAll('video').forEach(v=>{
-      try{ v.pause(); }catch(e){}
-    });
-    document.querySelectorAll('.works-frame iframe').forEach(iframe=>{
+    document.querySelectorAll('.works-frame iframe, .video-modal-body iframe').forEach(iframe=>{
       try{
         const src = iframe.src;
         iframe.src = '';
@@ -1190,52 +1190,31 @@ const worksConfig = {
     });
   }
 
-  window.togglePauseCardVideo = function(vid, btn){
-    const frame = document.getElementById('frame-' + vid);
+  window.togglePauseCardVideo = function(catVidKey){
+    const frame = document.getElementById('frame-' + catVidKey);
     if(!frame) return;
-    const video = frame.querySelector('video');
-    if(video){
-      if(video.paused){
-        video.play();
-        if(btn) btn.innerHTML = '⏸ ' + (currentLang === 'ar' ? 'إيقاف' : 'Pause');
-      }else{
-        video.pause(); // Pauses at the exact current frame without resetting to beginning!
-        if(btn) btn.innerHTML = '▶ ' + (currentLang === 'ar' ? 'تشغيل' : 'Play');
-      }
-      return;
-    }
     const iframe = frame.querySelector('iframe');
     if(iframe){
-      openVideoModal(vid, '', 'https://drive.google.com/file/d/' + vid + '/view', currentLang);
+      try{
+        const src = iframe.src;
+        iframe.src = '';
+        iframe.src = src;
+      }catch(e){}
     }
   };
 
-  window.openVideoModal = function(vid, title, driveUrl, lang){
+  window.openVideoModal = function(vid, lang){
     pauseAllVideos();
     const modal = document.getElementById('video-modal');
     const modalTitle = document.getElementById('videoModalTitle');
     const modalBody = document.getElementById('videoModalBody');
-    const modalLink = document.getElementById('videoModalDriveLink');
     const closeModalText = document.getElementById('closeModalText');
     if(!modal || !modalBody) return;
 
-    if(modalTitle) modalTitle.textContent = title || (lang === 'ar' ? 'معاينة الفيديو' : 'Video Preview');
-    closeModalText.textContent = lang === 'ar' ? 'إيقاف وإغلاق' : 'Pause & Close';
-    if(modalLink){
-      modalLink.textContent = lang === 'ar' ? 'Drive ↗' : 'Drive ↗';
-      modalLink.href = driveUrl;
-    }
+    if(modalTitle) modalTitle.textContent = lang === 'ar' ? 'معاينة الفيديو' : 'Video Preview';
+    if(closeModalText) closeModalText.textContent = lang === 'ar' ? 'إيقاف وإغلاق' : 'Pause & Close';
 
-    modalBody.innerHTML = '';
-    const video = document.createElement('video');
-    video.controls = true;
-    video.autoplay = true;
-    video.playsInline = true;
-    video.src = `https://drive.google.com/uc?export=download&id=${vid}`;
-    video.onerror = function(){
-      modalBody.innerHTML = `<iframe src="https://drive.google.com/file/d/${vid}/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
-    };
-    modalBody.appendChild(video);
+    modalBody.innerHTML = `<iframe src="https://drive.google.com/file/d/${vid}/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
 
     modal.classList.add('active');
     modal.setAttribute('aria-hidden', 'false');
@@ -1261,7 +1240,7 @@ const worksConfig = {
     if(e.key === 'Escape') window.closeVideoModal();
   });
 
-  /* ---- Works Render — embeds Google Drive / HTML5 video player ---- */
+  /* ---- Works Render — embeds Google Drive player safely ---- */
   function renderWorksPanel(category, lang){
     const panelId = category === 'motion' ? 'worksMotion' : 'worksEditing';
     const panel = document.getElementById(panelId);
@@ -1274,31 +1253,25 @@ const worksConfig = {
     if(items && items.length > 0){
       panel.innerHTML = `<div class="works-grid">${
         items.map(v=>{
-          const driveViewUrl = `https://drive.google.com/file/d/${v.id}/view`;
+          const catVidKey = `${category}-${v.id}`;
           const pauseBtnText = lang === 'ar' ? 'إيقاف' : 'Pause';
           const expandBtnText = lang === 'ar' ? 'تكبير' : 'Expand';
           return `
           <article class="works-card reveal">
-            <div class="works-frame" id="frame-${v.id}">
-              <video controls playsinline preload="metadata"
-                src="https://drive.google.com/uc?export=download&id=${v.id}"
-                onerror="this.outerHTML='<iframe src=\\'https://drive.google.com/file/d/${v.id}/preview\\' loading=\\'lazy\\' allowfullscreen allow=\\'autoplay\\'></iframe>'">
-              </video>
+            <div class="works-frame" id="frame-${catVidKey}">
+              <iframe src="https://drive.google.com/file/d/${v.id}/preview" loading="lazy" allowfullscreen allow="autoplay"></iframe>
             </div>
             <div class="works-info">
               <div class="works-info-text">
                 <span class="works-tag">${tagLabel}</span>
               </div>
               <div class="works-actions">
-                <button class="btn-pause-inline" onclick="togglePauseCardVideo('${v.id}', this)" title="${pauseBtnText}">
+                <button class="btn-pause-inline" onclick="togglePauseCardVideo('${catVidKey}')" title="${pauseBtnText}">
                   ⏸ ${pauseBtnText}
                 </button>
-                <button class="btn-expand-modal" onclick="openVideoModal('${v.id}', '', '${driveViewUrl}', '${lang}')" title="${expandBtnText}">
+                <button class="btn-expand-modal" onclick="openVideoModal('${v.id}', '${lang}')" title="${expandBtnText}">
                   ⛶ ${expandBtnText}
                 </button>
-                <a href="${driveViewUrl}" target="_blank" rel="noopener" class="works-link-btn">
-                  Drive ↗
-                </a>
               </div>
             </div>
           </article>`;

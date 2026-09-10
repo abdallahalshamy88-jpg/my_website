@@ -323,6 +323,16 @@
   .works-frame video{
     display:block; width:100%; height:100%; border:0; background:#0d0f11; object-fit:cover;
   }
+  .iframe-safe-wrapper{
+    position:relative; width:100%; height:100%; overflow:hidden; background:#0d0f11;
+  }
+  .iframe-safe-wrapper iframe{
+    display:block; width:100%; height:100%; border:0;
+  }
+  .iframe-top-blocker{
+    position:absolute; top:0; left:0; right:0; height:56px;
+    z-index:99; pointer-events:auto; background:transparent;
+  }
   .works-info{
     padding:14px 16px; border-top:1px solid var(--line);
     display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
@@ -1215,8 +1225,23 @@ const worksConfig = {
     if(modalTitle) modalTitle.textContent = lang === 'ar' ? 'معاينة الفيديو' : 'Video Preview';
     if(closeModalText) closeModalText.textContent = lang === 'ar' ? 'إيقاف وإغلاق' : 'Pause & Close';
 
-    modalBody.innerHTML = `<iframe src="https://drive.google.com/file/d/${vid}/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+    modalBody.innerHTML = '';
+    const video = document.createElement('video');
+    video.controls = true;
+    video.autoplay = true;
+    video.setAttribute('playsinline', 'true');
+    video.setAttribute('webkit-playsinline', 'true');
+    video.src = `https://drive.google.com/uc?export=download&id=${vid}`;
 
+    video.onerror = function(){
+      modalBody.innerHTML = `
+        <div class="iframe-safe-wrapper">
+          <div class="iframe-top-blocker"></div>
+          <iframe src="https://drive.google.com/file/d/${vid}/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>
+        </div>`;
+    };
+
+    modalBody.appendChild(video);
     modal.classList.add('active');
     modal.setAttribute('aria-hidden', 'false');
   };
@@ -1260,7 +1285,10 @@ const worksConfig = {
           return `
           <article class="works-card reveal">
             <div class="works-frame" id="frame-${catVidKey}">
-              <iframe src="https://drive.google.com/file/d/${v.id}/preview" loading="lazy" allowfullscreen allow="autoplay"></iframe>
+              <div class="iframe-safe-wrapper">
+                <div class="iframe-top-blocker"></div>
+                <iframe src="https://drive.google.com/file/d/${v.id}/preview" loading="lazy" allowfullscreen allow="autoplay"></iframe>
+              </div>
             </div>
             <div class="works-info">
               <div class="works-info-text">

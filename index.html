@@ -298,6 +298,50 @@
   .works-tab:not(:last-child){ border-right:1px solid var(--line); }
   body.ar .works-tab:not(:last-child){ border-right:none; border-left:1px solid var(--line); }
 
+  /* ---------- Trending Section ---------- */
+  #trending{ padding-top:40px; padding-bottom:60px; }
+  .trending-header{
+    display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:24px; flex-wrap:wrap;
+  }
+  .trending-badge-glow{
+    display:inline-flex; align-items:center; gap:8px;
+    background:linear-gradient(135deg, rgba(255,107,74,0.15), rgba(214,36,159,0.15));
+    border:1px solid rgba(255,107,74,0.4); padding:6px 14px; border-radius:20px;
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--orange); font-weight:600;
+    box-shadow:0 0 16px rgba(255,107,74,0.2);
+  }
+  .trending-badge-glow i{
+    width:8px; height:8px; border-radius:50%; background:var(--orange);
+    box-shadow:0 0 8px var(--orange); animation:pulseGlow 1.5s infinite;
+  }
+  @keyframes pulseGlow{
+    0%,100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:0.4; transform:scale(0.8); }
+  }
+  .trending-grid{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:20px;
+  }
+  .trending-card{
+    background:var(--panel); border:1px solid rgba(255,107,74,0.3); border-radius:var(--radius);
+    overflow:hidden; position:relative; transition:border-color .2s, transform .2s, box-shadow .2s;
+    box-shadow:0 8px 30px rgba(0,0,0,0.3);
+  }
+  .trending-card:hover{
+    border-color:var(--orange); transform:translateY(-3px);
+    box-shadow:0 12px 40px rgba(255,107,74,0.25);
+  }
+  .trending-stats-overlay{
+    display:flex; align-items:center; gap:16px; padding:12px 16px;
+    background:rgba(18,20,23,0.95); border-top:1px solid var(--line); flex-wrap:wrap;
+  }
+  .stat-pill{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'IBM Plex Mono', monospace; font-size:13px; font-weight:600;
+  }
+  .stat-pill.views{ color:#38ef7d; }
+  .stat-pill.likes{ color:#fd5949; }
+  .stat-pill svg{ flex-shrink:0; }
+
   .works-panel{ display:none; }
   .works-panel.active{ display:block; }
 
@@ -762,6 +806,15 @@
   </div>
 </section>
 
+<!-- ===== TRENDING / VIRAL SECTION ===== -->
+<section id="trending">
+  <div class="trending-header">
+    <h2 class="title" style="margin:0" id="trendingTitle">🔥 VIRAL &amp; TRENDING WORKS</h2>
+    <span class="trending-badge-glow"><i></i> <span id="trendingBadgeText">TOP PERFORMING</span></span>
+  </div>
+  <div id="trendingGrid" class="trending-grid"></div>
+</section>
+
 <!-- ===== WORKS / PORTFOLIO SECTION ===== -->
 <section id="works">
   <h2 class="title">Selected Works</h2>
@@ -895,6 +948,16 @@
    Get the ID from the share link: drive.google.com/file/d/ID_HERE/view
    ============================================================ */
 const worksConfig = {
+  trending: [
+    {
+      id: '1lDEpp82W0I1u8oYPSWHS5dg493Za7Sng',
+      title: '6M+ Viral Motion Reel',
+      title_ar: 'فيديو تريند — 6 مليون مشاهدة',
+      views: '6,000,000+',
+      likes: '139,000+',
+      tag: 'VIRAL REEL'
+    }
+  ],
   motion: [
     { id: '16xqNDggU1hG95jlY7csIWybvLKJmRPms', title: 'Motion Reel 01', title_ar: 'موشن ريل 01' },
     { id: '1Zq2Loi40Y1XHKqC04vPA9vC9SrJIVsOa', title: 'Motion Reel 02', title_ar: 'موشن ريل 02' },
@@ -954,6 +1017,8 @@ const worksConfig = {
         worksTitle: 'Selected Works',
         worksTabMotion: '▶ MOTION DESIGN',
         worksTabEditing: '✂ VIDEO EDITING',
+        trendingTitle: '🔥 VIRAL & TRENDING WORKS',
+        trendingBadge: 'TOP PERFORMING',
         worksDriveLabel: 'Browse full portfolio on Google Drive',
         worksDriveBtn: '▶ OPEN PORTFOLIO FOLDER →',
         trainingEyebrow: '// 00:00:28 — Bin',
@@ -1047,6 +1112,8 @@ const worksConfig = {
         worksTitle: 'أعمال مختارة',
         worksTabMotion: '▶ موشن ديزاين',
         worksTabEditing: '✂ مونتاج فيديو',
+        trendingTitle: '🔥 أعمال تريند والأعلى مشاهدة',
+        trendingBadge: 'الأكثر انتشارات',
         worksDriveLabel: 'تصفح كل الأعمال على Google Drive',
         worksDriveBtn: '▶ فتح فولدر الأعمال ←',
         trainingEyebrow: '// 00:00:28 — التدريب',
@@ -1141,7 +1208,8 @@ const worksConfig = {
     {id:'hero',       tc:'00:00:00:00', labels:{en:'INTRO',    ar:'البداية'}},
     {id:'skills',     tc:'00:00:08:00', labels:{en:'TRACKS',   ar:'المهارات'}},
     {id:'experience', tc:'00:00:16:00', labels:{en:'WORK',     ar:'العمل'}},
-    {id:'works',      tc:'00:00:22:00', labels:{en:'WORKS',    ar:'الأعمال'}},
+    {id:'trending',   tc:'00:00:20:00', labels:{en:'VIRAL',    ar:'تريند'}},
+    {id:'works',      tc:'00:00:24:00', labels:{en:'WORKS',    ar:'الأعمال'}},
     ...(portfolioVideos.length ? [{id:'videos', tc:'00:00:25:00', labels:{en:'VIDEOS', ar:'فيديوهات'}}] : []),
     {id:'training',   tc:'00:00:28:00', labels:{en:'TRAINING', ar:'التدريب'}},
     {id:'contact',    tc:'00:00:38:00', labels:{en:'CONTACT',  ar:'تواصل'}},
@@ -1318,7 +1386,63 @@ const worksConfig = {
     }
   }
 
+  function renderTrending(lang){
+    const grid = document.getElementById('trendingGrid');
+    if(!grid) return;
+    const items = worksConfig.trending || [];
+    if(!items.length){
+      document.getElementById('trending').style.display = 'none';
+      return;
+    }
+    grid.innerHTML = items.map(v=>{
+      const catVidKey = `trending-${v.id}`;
+      const pauseBtnText = lang === 'ar' ? 'إيقاف' : 'Pause';
+      const expandBtnText = lang === 'ar' ? 'تكبير' : 'Expand';
+      const viewsText = lang === 'ar' ? `${v.views} مشاهدة` : `${v.views} Views`;
+      const likesText = lang === 'ar' ? `${v.likes} إعجاب` : `${v.likes} Likes`;
+      return `
+      <article class="trending-card reveal">
+        <div class="works-frame" id="frame-${catVidKey}">
+          <div class="iframe-safe-wrapper">
+            <div class="iframe-top-blocker"></div>
+            <iframe src="https://drive.google.com/file/d/${v.id}/preview" loading="lazy" allowfullscreen allow="autoplay"></iframe>
+          </div>
+        </div>
+        <div class="trending-stats-overlay">
+          <span class="stat-pill views">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            ${viewsText}
+          </span>
+          <span class="stat-pill likes">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            ${likesText}
+          </span>
+        </div>
+        <div class="works-info">
+          <div class="works-info-text">
+            <span class="works-tag" style="color:var(--orange)">🔥 ${v.tag || 'VIRAL'}</span>
+          </div>
+          <div class="works-actions">
+            <button class="btn-pause-inline" onclick="togglePauseCardVideo('${catVidKey}')" title="${pauseBtnText}">
+              ⏸ ${pauseBtnText}
+            </button>
+            <button class="btn-expand-modal" onclick="openVideoModal('${v.id}', '${lang}')" title="${expandBtnText}">
+              ⛶ ${expandBtnText}
+            </button>
+          </div>
+        </div>
+      </article>`;
+    }).join('');
+    grid.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  }
+
   function renderWorks(lang){
+    renderTrending(lang);
     renderWorksPanel('motion', lang);
     renderWorksPanel('editing', lang);
   }
@@ -1388,6 +1512,8 @@ const worksConfig = {
     setText('.btn-ghost:last-of-type', t.ctaSecondary);
     langToggle.textContent = t.langButton;
 
+    setText('#trendingTitle', t.sections.trendingTitle);
+    setText('#trendingBadgeText', t.sections.trendingBadge);
     setText('#skills .eyebrow', t.sections.skillsEyebrow);
     setText('#skills .title', t.sections.skillsTitle);
     setText('#experience .eyebrow', t.sections.experienceEyebrow);

@@ -364,8 +364,8 @@
     aspect-ratio:16/9; background:#0d0f11; position:relative; overflow:hidden;
   }
   /* Block Google Drive top-right popout icon so mobile users stay on website */
-  .works-frame::after,
-  .video-modal-body::after{
+  .works-frame:has(iframe)::after,
+  .video-modal-body:has(iframe)::after{
     content:""; position:absolute; top:0; right:0; width:64px; height:64px;
     z-index:10; pointer-events:auto; background:transparent;
   }
@@ -373,6 +373,18 @@
   .works-frame video{
     display:block; width:100%; height:100%; border:0; background:#0d0f11; object-fit:cover;
   }
+  .works-frame video{ object-fit:contain; }
+  .work-play{ display:flex; width:100%; height:100%; padding:0; border:0; align-items:center; justify-content:center; flex-direction:column; gap:12px; cursor:pointer; color:white; background-color:#17191c; background-position:center; background-size:cover; position:relative; }
+  .work-play::before{ content:""; position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.6)); transition:background .2s; }
+  .work-play-icon{ display:grid; place-items:center; z-index:1; width:56px; height:56px; padding-inline-start:4px; border-radius:50%; background:var(--orange); color:#15171a; box-shadow:0 4px 20px #0006; transition:transform .2s; }
+  .work-play-label{ z-index:1; font:inherit; font-size:12px; padding:5px 10px; border-radius:6px; background:#111b; }
+  .work-play:hover .work-play-icon{ transform:scale(1.12); }
+  .work-play:focus-visible{ outline:3px solid var(--teal); outline-offset:-3px; }
+  .works-info h3{ white-space:normal; line-height:1.6; }
+  .works-actions button{ min-height:40px; }
+  @media(max-width:600px){ .works-grid,.trending-grid{ grid-template-columns:1fr; } .works-info{ padding:14px; } .works-actions{ width:100%; } .works-actions button{ flex:1; } }
+
+  .video-modal-body video{ display:block; max-height:75vh; width:100%; object-fit:contain; }
   .iframe-safe-wrapper{
     position:relative; width:100%; height:100%; overflow:hidden; background:#0d0f11;
   }
@@ -901,7 +913,7 @@
   </div>
 </section>
 
-<footer>ABDALLAH AL-SHAMY · MOTION DESIGNER &amp; VIDEO EDITOR · © 2026</footer>
+<footer>ABDALLAH AL-SHAMY · MOTION DESIGNER &amp; VIDEO EDITOR · © 2026<br><a href="https://shamy-portfolio-admin.abdallahalshamy88.workers.dev" target="_blank" rel="noopener" style="display:inline-block;margin-top:14px;color:var(--muted);font-size:12px">إدارة الأعمال · Dashboard</a></footer>
 
 <!-- ===== Floating Social Buttons (Instagram & WhatsApp) ===== -->
 <div class="float-stack">
@@ -922,7 +934,7 @@
 </div>
 
 <!-- ===== Video Lightbox Modal ===== -->
-<div id="video-modal" aria-hidden="true">
+<div id="video-modal" role="dialog" aria-modal="true" aria-labelledby="videoModalTitle" aria-hidden="true">
   <div class="video-modal-content">
     <div class="video-modal-header">
       <h3 class="video-modal-title" id="videoModalTitle">معاينة الفيديو</h3>
@@ -938,7 +950,7 @@
 </div>
 
 <!-- ===== Videos Manifest ===== -->
-<script src="videos/videos-manifest.js"></script>
+
 <script>
 
 /* ============================================================
@@ -954,70 +966,7 @@
    TO UPDATE WORKS: add the Google Drive File ID to the right array.
    Get the ID from the share link: drive.google.com/file/d/ID_HERE/view
    ============================================================ */
-const worksConfig = {
-  trending: [
-    {
-      id: '1lDEpp82W0I1u8oYPSWHS5dg493Za7Sng',
-      title: '6M+ Viral Motion Reel',
-      title_ar: 'فيديو تريند — 6 مليون مشاهدة',
-      views: '6,000,000+',
-      likes: '139,000+',
-      tag: 'VIRAL REEL'
-    },
-    {
-      id: '1vcLy_ycG7dA6zfZuRTuc-pOnhUWQYP_G',
-      title: '5.5M+ Viral Reel',
-      title_ar: 'فيديو تريند — 5.5 مليون مشاهدة',
-      views: '5,500,000+',
-      likes: '48,000+',
-      tag: 'VIRAL REEL'
-    },
-    {
-      id: '1KiJxxefujFwhxmkPhLOqutBz-C5-uaBq',
-      title: '2M+ Viral Reel',
-      title_ar: 'فيديو تريند — 2 مليون مشاهدة',
-      views: '2,000,000+',
-      likes: '38,000+',
-      tag: 'VIRAL REEL'
-    }
-  ],
-  motion: [
-    { id: '16xqNDggU1hG95jlY7csIWybvLKJmRPms', title: 'Motion Reel 01', title_ar: 'موشن ريل 01' },
-    { id: '1Zq2Loi40Y1XHKqC04vPA9vC9SrJIVsOa', title: 'Motion Reel 02', title_ar: 'موشن ريل 02' },
-    { id: '18eswz2ilR4MNAhwGDVfABviySg_PAvbK', title: 'Motion Reel 03', title_ar: 'موشن ريل 03' },
-    { id: '1nA2XyOsGqjxwE6q5zdGoD-zve2PWsgDl', title: 'Motion Reel 04', title_ar: 'موشن ريل 04' },
-    { id: '1KEu5_APUwiZOmVfF_p8_hCtpiprVUKv3', title: 'Motion Reel 05', title_ar: 'موشن ريل 05' },
-    { id: '18bYa2rSztwqt4PzxzneScyBy3h-nakWy', title: 'Motion Reel 06', title_ar: 'موشن ريل 06' },
-    { id: '1wusQwqBDJEHqECv3eR6GFaWWIHl1yooS', title: 'Motion Reel 07', title_ar: 'موشن ريل 07' },
-    { id: '1GZ9FePTpw6BH3eCr-3PkMDtTHLubqPF2', title: 'Motion Reel 08', title_ar: 'موشن ريل 08' },
-    { id: '1s1ZgwNBtL6BLZFR8gYo0tDAhUC_5XJ3j', title: 'Motion Reel 09', title_ar: 'موشن ريل 09' },
-    { id: '1cIiECBIvFf90x3_1q-ar7ZM3ikxV9-yw', title: 'Motion Reel 10', title_ar: 'موشن ريل 10' },
-    { id: '1qSHFfsvJRZdmaYldc3LjXwuCwiZV0Ue4', title: 'Motion Reel 11', title_ar: 'موشن ريل 11' },
-    { id: '1mHS-9CRBHXP_LyAyVvGIFZS9iOlPYXyB', title: 'Motion Reel 12', title_ar: 'موشن ريل 12' },
-    { id: '1GzNYb21egdqLhMxus2lXZnJn1_Ng3DPd', title: 'Motion Reel 13', title_ar: 'موشن ريل 13' },
-    { id: '1oPJ58ZlFaE2d7cVvLre1-rSRnI6MpdGn', title: 'Spedia Campaign',  title_ar: 'حملة سبيديا'   },
-  ],
-  editing: [
-    { id: '1YauqIL1zy0laU-cx1prHQ_gHG8v2flOi', title: 'Hassan Kamel Al-Sabbah', title_ar: 'حسن كامل الصباح'    },
-    { id: '1pYcyMEUomzGCOmyARlPq-kAw2KyPH8Aw', title: 'Dr. Mostafa Mahmoud',    title_ar: 'دكتور مصطفي محمود' },
-    { id: '14wJXumftXdup7rb-AuiKPGb5yzYznNKM', title: "Mus'ab ibn Umayr",       title_ar: 'مصعب بن عمير'      },
-    { id: '1yC5Ko04yW7clBtEiOt_zYu5PXjiQUBKo', title: 'Al-Habbab',              title_ar: 'الحباب'             },
-    { id: '14mOgmNVSUKynAdsFw0KyPPmmYtkwNmEW', title: 'Ibn Al-Haytham',          title_ar: 'ابن الهيثم'         },
-    { id: '1BjngebRck6iKrzjiF5fE_5NVrxhmuuPn', title: 'Editing Reel 01',         title_ar: 'مونتاج ريل 01'      },
-    { id: '15PCk0D6BZkJrTU0ojgzcBfiYVb3GUWkZ', title: 'Editing Reel 02',         title_ar: 'مونتاج ريل 02'      },
-    { id: '1fyvcuWUOLleaSN0Qbilq0nepiBu4lmev', title: 'Editing Reel 03',         title_ar: 'مونتاج ريل 03'      },
-    { id: '1q4fGKgCuWDjzfVmfx05L-7wrHTNArwGC', title: 'Editing Reel 04',         title_ar: 'مونتاج ريل 04'      },
-    { id: '1sP1rJVEjNm-iityAhFQUiHhfL-w6ECNi', title: 'Editing Reel 05',         title_ar: 'مونتاج ريل 05'      },
-    { id: '1UfSK0flKV8r2ej1-BmFGorWWH4WDmVD6', title: 'Editing Reel 06',         title_ar: 'مونتاج ريل 06'      },
-    { id: '1pu__B4VGc66qzDWldNsF358qdFZrx4cg', title: 'Editing Reel 07',         title_ar: 'مونتاج ريل 07'      },
-    { id: '1YMhfXOIpOQS9oHEFGGW2zhP7tmZY7B39', title: 'Editing Reel 08',         title_ar: 'مونتاج ريل 08'      },
-    { id: '1Ci-p-l7pdfH7bZny9LyUHJ7-mC9E36cl', title: 'Editing Reel 09',         title_ar: 'مونتاج ريل 09'      },
-  ],
-  driveFolderUrl: 'https://drive.google.com/drive/folders/1-TKqTgYe_zPrIhFrP77lz3fIvodlpAMI',
-  driveEmbedUrl:  'https://drive.google.com/embeddedfolderview?id=1-TKqTgYe_zPrIhFrP77lz3fIvodlpAMI#grid'
-};
-
-/* ============================================================ */
+const worksConfig = {"motion": [{"id": "brand-sanaa", "title": "Sanaa — Brand Identity in Motion", "title_ar": "صنعا — تحريك الهوية البصرية", "mediaKey": "brand/sanaa.mp4", "posterKey": "posters/sanaa.jpg", "fresh": true, "category": "motion", "order": 0, "published": true, "archived": false}, {"id": "brand-lujain", "title": "Lujain — Brand Identity in Motion", "title_ar": "لجين — تحريك الهوية البصرية", "mediaKey": "brand/lujain.mp4", "posterKey": "posters/lujain.jpg", "fresh": true, "category": "motion", "order": 1, "published": true, "archived": false}, {"id": "brand-sulaf", "title": "Sulaf — Brand Identity in Motion", "title_ar": "سلاف — تحريك الهوية البصرية", "mediaKey": "brand/sulaf.mp4", "posterKey": "posters/sulaf.jpg", "fresh": true, "category": "motion", "order": 2, "published": true, "archived": false}, {"id": "brand-fi-elsekka", "title": "Fi El Sekka — Logo Animation", "title_ar": "في السكة — تحريك اللوجو", "mediaKey": "brand/fi-elsekka.mp4", "posterKey": "posters/fi-elsekka.jpg", "fresh": true, "category": "motion", "order": 3, "published": true, "archived": false}, {"id": "16xqNDggU1hG95jlY7csIWybvLKJmRPms", "title": "Motion Reel 01", "title_ar": "موشن ريل 01", "category": "motion", "order": 4, "published": true, "archived": false, "mediaKey": "legacy/16xqNDggU1hG95jlY7csIWybvLKJmRPms.mp4", "posterKey": "posters/16xqNDggU1hG95jlY7csIWybvLKJmRPms.jpg", "fresh": false}, {"id": "1Zq2Loi40Y1XHKqC04vPA9vC9SrJIVsOa", "title": "Motion Reel 02", "title_ar": "موشن ريل 02", "category": "motion", "order": 5, "published": true, "archived": false, "mediaKey": "legacy/1Zq2Loi40Y1XHKqC04vPA9vC9SrJIVsOa.mp4", "posterKey": "posters/1Zq2Loi40Y1XHKqC04vPA9vC9SrJIVsOa.jpg", "fresh": false}, {"id": "18eswz2ilR4MNAhwGDVfABviySg_PAvbK", "title": "Motion Reel 03", "title_ar": "موشن ريل 03", "category": "motion", "order": 6, "published": true, "archived": false, "mediaKey": "legacy/18eswz2ilR4MNAhwGDVfABviySg_PAvbK.mp4", "posterKey": "posters/18eswz2ilR4MNAhwGDVfABviySg_PAvbK.jpg", "fresh": false}, {"id": "1nA2XyOsGqjxwE6q5zdGoD-zve2PWsgDl", "title": "Motion Reel 04", "title_ar": "موشن ريل 04", "category": "motion", "order": 7, "published": true, "archived": false, "mediaKey": "legacy/1nA2XyOsGqjxwE6q5zdGoD-zve2PWsgDl.mp4", "posterKey": "posters/1nA2XyOsGqjxwE6q5zdGoD-zve2PWsgDl.jpg", "fresh": false}, {"id": "1KEu5_APUwiZOmVfF_p8_hCtpiprVUKv3", "title": "Motion Reel 05", "title_ar": "موشن ريل 05", "category": "motion", "order": 8, "published": true, "archived": false, "mediaKey": "legacy/1KEu5_APUwiZOmVfF_p8_hCtpiprVUKv3.mp4", "posterKey": "posters/1KEu5_APUwiZOmVfF_p8_hCtpiprVUKv3.jpg", "fresh": false}, {"id": "18bYa2rSztwqt4PzxzneScyBy3h-nakWy", "title": "Motion Reel 06", "title_ar": "موشن ريل 06", "category": "motion", "order": 9, "published": true, "archived": false, "mediaKey": "legacy/18bYa2rSztwqt4PzxzneScyBy3h-nakWy.mp4", "posterKey": "posters/18bYa2rSztwqt4PzxzneScyBy3h-nakWy.jpg", "fresh": false}, {"id": "1wusQwqBDJEHqECv3eR6GFaWWIHl1yooS", "title": "Motion Reel 07", "title_ar": "موشن ريل 07", "category": "motion", "order": 10, "published": true, "archived": false, "mediaKey": "legacy/1wusQwqBDJEHqECv3eR6GFaWWIHl1yooS.mp4", "posterKey": "posters/1wusQwqBDJEHqECv3eR6GFaWWIHl1yooS.jpg", "fresh": false}, {"id": "1GZ9FePTpw6BH3eCr-3PkMDtTHLubqPF2", "title": "Motion Reel 08", "title_ar": "موشن ريل 08", "category": "motion", "order": 11, "published": true, "archived": false, "mediaKey": "legacy/1GZ9FePTpw6BH3eCr-3PkMDtTHLubqPF2.mp4", "posterKey": "posters/1GZ9FePTpw6BH3eCr-3PkMDtTHLubqPF2.jpg", "fresh": false}, {"id": "1s1ZgwNBtL6BLZFR8gYo0tDAhUC_5XJ3j", "title": "Motion Reel 09", "title_ar": "موشن ريل 09", "category": "motion", "order": 12, "published": true, "archived": false, "mediaKey": "legacy/1s1ZgwNBtL6BLZFR8gYo0tDAhUC_5XJ3j.mp4", "posterKey": "posters/1s1ZgwNBtL6BLZFR8gYo0tDAhUC_5XJ3j.jpg", "fresh": false}, {"id": "1cIiECBIvFf90x3_1q-ar7ZM3ikxV9-yw", "title": "Motion Reel 10", "title_ar": "موشن ريل 10", "category": "motion", "order": 13, "published": true, "archived": false, "mediaKey": "legacy/1cIiECBIvFf90x3_1q-ar7ZM3ikxV9-yw.mp4", "posterKey": "posters/1cIiECBIvFf90x3_1q-ar7ZM3ikxV9-yw.jpg", "fresh": false}, {"id": "1qSHFfsvJRZdmaYldc3LjXwuCwiZV0Ue4", "title": "Motion Reel 11", "title_ar": "موشن ريل 11", "category": "motion", "order": 14, "published": true, "archived": false, "mediaKey": "legacy/1qSHFfsvJRZdmaYldc3LjXwuCwiZV0Ue4.mp4", "posterKey": "posters/1qSHFfsvJRZdmaYldc3LjXwuCwiZV0Ue4.jpg", "fresh": false}, {"id": "1mHS-9CRBHXP_LyAyVvGIFZS9iOlPYXyB", "title": "Motion Reel 12", "title_ar": "موشن ريل 12", "category": "motion", "order": 15, "published": true, "archived": false, "mediaKey": "legacy/1mHS-9CRBHXP_LyAyVvGIFZS9iOlPYXyB.mp4", "posterKey": "posters/1mHS-9CRBHXP_LyAyVvGIFZS9iOlPYXyB.jpg", "fresh": false}, {"id": "1GzNYb21egdqLhMxus2lXZnJn1_Ng3DPd", "title": "Motion Reel 13", "title_ar": "موشن ريل 13", "category": "motion", "order": 16, "published": true, "archived": false, "mediaKey": "legacy/1GzNYb21egdqLhMxus2lXZnJn1_Ng3DPd.mp4", "posterKey": "posters/1GzNYb21egdqLhMxus2lXZnJn1_Ng3DPd.jpg", "fresh": false}, {"id": "1oPJ58ZlFaE2d7cVvLre1-rSRnI6MpdGn", "title": "Spedia Campaign", "title_ar": "حملة سبيديا", "category": "motion", "order": 17, "published": true, "archived": false, "mediaKey": "legacy/1oPJ58ZlFaE2d7cVvLre1-rSRnI6MpdGn.mp4", "posterKey": "posters/1oPJ58ZlFaE2d7cVvLre1-rSRnI6MpdGn.jpg", "fresh": false}], "editing": [{"id": "1YauqIL1zy0laU-cx1prHQ_gHG8v2flOi", "title": "Hassan Kamel Al-Sabbah", "title_ar": "حسن كامل الصباح", "category": "editing", "order": 18, "published": true, "archived": false, "mediaKey": "legacy/1YauqIL1zy0laU-cx1prHQ_gHG8v2flOi.mp4", "posterKey": "posters/1YauqIL1zy0laU-cx1prHQ_gHG8v2flOi.jpg", "fresh": false}, {"id": "1pYcyMEUomzGCOmyARlPq-kAw2KyPH8Aw", "title": "Dr. Mostafa Mahmoud", "title_ar": "دكتور مصطفي محمود", "category": "editing", "order": 19, "published": true, "archived": false, "mediaKey": "legacy/1pYcyMEUomzGCOmyARlPq-kAw2KyPH8Aw.mp4", "posterKey": "posters/1pYcyMEUomzGCOmyARlPq-kAw2KyPH8Aw.jpg", "fresh": false}, {"id": "14wJXumftXdup7rb-AuiKPGb5yzYznNKM", "title": "Mus'ab ibn Umayr", "title_ar": "مصعب بن عمير", "category": "editing", "order": 20, "published": true, "archived": false, "mediaKey": "legacy/14wJXumftXdup7rb-AuiKPGb5yzYznNKM.mp4", "posterKey": "posters/14wJXumftXdup7rb-AuiKPGb5yzYznNKM.jpg", "fresh": false}, {"id": "1yC5Ko04yW7clBtEiOt_zYu5PXjiQUBKo", "title": "Al-Habbab", "title_ar": "الحباب", "category": "editing", "order": 21, "published": true, "archived": false, "mediaKey": "legacy/1yC5Ko04yW7clBtEiOt_zYu5PXjiQUBKo.mp4", "posterKey": "posters/1yC5Ko04yW7clBtEiOt_zYu5PXjiQUBKo.jpg", "fresh": false}, {"id": "14mOgmNVSUKynAdsFw0KyPPmmYtkwNmEW", "title": "Ibn Al-Haytham", "title_ar": "ابن الهيثم", "category": "editing", "order": 22, "published": true, "archived": false, "mediaKey": "legacy/14mOgmNVSUKynAdsFw0KyPPmmYtkwNmEW.mp4", "posterKey": "posters/14mOgmNVSUKynAdsFw0KyPPmmYtkwNmEW.jpg", "fresh": false}, {"id": "1BjngebRck6iKrzjiF5fE_5NVrxhmuuPn", "title": "Editing Reel 01", "title_ar": "مونتاج ريل 01", "category": "editing", "order": 23, "published": true, "archived": false, "mediaKey": "legacy/1BjngebRck6iKrzjiF5fE_5NVrxhmuuPn.mp4", "posterKey": "posters/1BjngebRck6iKrzjiF5fE_5NVrxhmuuPn.jpg", "fresh": false}, {"id": "15PCk0D6BZkJrTU0ojgzcBfiYVb3GUWkZ", "title": "Editing Reel 02", "title_ar": "مونتاج ريل 02", "category": "editing", "order": 24, "published": true, "archived": false, "mediaKey": "legacy/15PCk0D6BZkJrTU0ojgzcBfiYVb3GUWkZ.mp4", "posterKey": "posters/15PCk0D6BZkJrTU0ojgzcBfiYVb3GUWkZ.jpg", "fresh": false}, {"id": "1fyvcuWUOLleaSN0Qbilq0nepiBu4lmev", "title": "Editing Reel 03", "title_ar": "مونتاج ريل 03", "category": "editing", "order": 25, "published": true, "archived": false, "mediaKey": "legacy/1fyvcuWUOLleaSN0Qbilq0nepiBu4lmev.mp4", "posterKey": "posters/1fyvcuWUOLleaSN0Qbilq0nepiBu4lmev.jpg", "fresh": false}, {"id": "1q4fGKgCuWDjzfVmfx05L-7wrHTNArwGC", "title": "Editing Reel 04", "title_ar": "مونتاج ريل 04", "category": "editing", "order": 26, "published": true, "archived": false, "mediaKey": "legacy/1q4fGKgCuWDjzfVmfx05L-7wrHTNArwGC.mp4", "posterKey": "posters/1q4fGKgCuWDjzfVmfx05L-7wrHTNArwGC.jpg", "fresh": false}, {"id": "1sP1rJVEjNm-iityAhFQUiHhfL-w6ECNi", "title": "Editing Reel 05", "title_ar": "مونتاج ريل 05", "category": "editing", "order": 27, "published": true, "archived": false, "mediaKey": "legacy/1sP1rJVEjNm-iityAhFQUiHhfL-w6ECNi.mp4", "posterKey": "posters/1sP1rJVEjNm-iityAhFQUiHhfL-w6ECNi.jpg", "fresh": false}, {"id": "1UfSK0flKV8r2ej1-BmFGorWWH4WDmVD6", "title": "Editing Reel 06", "title_ar": "مونتاج ريل 06", "category": "editing", "order": 28, "published": true, "archived": false, "mediaKey": "legacy/1UfSK0flKV8r2ej1-BmFGorWWH4WDmVD6.mp4", "posterKey": "posters/1UfSK0flKV8r2ej1-BmFGorWWH4WDmVD6.jpg", "fresh": false}, {"id": "1pu__B4VGc66qzDWldNsF358qdFZrx4cg", "title": "Editing Reel 07", "title_ar": "مونتاج ريل 07", "category": "editing", "order": 29, "published": true, "archived": false, "mediaKey": "legacy/1pu__B4VGc66qzDWldNsF358qdFZrx4cg.mp4", "posterKey": "posters/1pu__B4VGc66qzDWldNsF358qdFZrx4cg.jpg", "fresh": false}, {"id": "1YMhfXOIpOQS9oHEFGGW2zhP7tmZY7B39", "title": "Editing Reel 08", "title_ar": "مونتاج ريل 08", "category": "editing", "order": 30, "published": true, "archived": false, "mediaKey": "legacy/1YMhfXOIpOQS9oHEFGGW2zhP7tmZY7B39.mp4", "posterKey": "posters/1YMhfXOIpOQS9oHEFGGW2zhP7tmZY7B39.jpg", "fresh": false}, {"id": "1Ci-p-l7pdfH7bZny9LyUHJ7-mC9E36cl", "title": "Editing Reel 09", "title_ar": "مونتاج ريل 09", "category": "editing", "order": 31, "published": true, "archived": false, "mediaKey": "legacy/1Ci-p-l7pdfH7bZny9LyUHJ7-mC9E36cl.mp4", "posterKey": "posters/1Ci-p-l7pdfH7bZny9LyUHJ7-mC9E36cl.jpg", "fresh": false}, {"id": "news-report", "title": "News Report — Video Editing", "title_ar": "تقرير إخباري — مونتاج فيديو", "category": "editing", "order": 35, "published": true, "archived": false, "mediaKey": "legacy/news-report.mp4", "posterKey": "posters/news-report.jpg", "fresh": false}], "trending": [{"id": "1lDEpp82W0I1u8oYPSWHS5dg493Za7Sng", "title": "6M+ Viral Motion Reel", "title_ar": "فيديو تريند — 6 مليون مشاهدة", "views": "6,000,000+", "likes": "139,000+", "tag": "VIRAL REEL", "category": "trending", "order": 32, "published": true, "archived": false, "mediaKey": "legacy/1lDEpp82W0I1u8oYPSWHS5dg493Za7Sng.mp4", "posterKey": "posters/1lDEpp82W0I1u8oYPSWHS5dg493Za7Sng.jpg", "fresh": false}, {"id": "1vcLy_ycG7dA6zfZuRTuc-pOnhUWQYP_G", "title": "5.5M+ Viral Reel", "title_ar": "فيديو تريند — 5.5 مليون مشاهدة", "views": "5,500,000+", "likes": "48,000+", "tag": "VIRAL REEL", "category": "trending", "order": 33, "published": true, "archived": false, "mediaKey": "legacy/1vcLy_ycG7dA6zfZuRTuc-pOnhUWQYP_G.mp4", "posterKey": "posters/1vcLy_ycG7dA6zfZuRTuc-pOnhUWQYP_G.jpg", "fresh": false}, {"id": "1KiJxxefujFwhxmkPhLOqutBz-C5-uaBq", "title": "2M+ Viral Reel", "title_ar": "فيديو تريند — 2 مليون مشاهدة", "views": "2,000,000+", "likes": "38,000+", "tag": "VIRAL REEL", "category": "trending", "order": 34, "published": true, "archived": false, "mediaKey": "legacy/1KiJxxefujFwhxmkPhLOqutBz-C5-uaBq.mp4", "posterKey": "posters/1KiJxxefujFwhxmkPhLOqutBz-C5-uaBq.jpg", "fresh": false}], "driveFolderUrl": "https://drive.google.com/"};
 
   const content = {
     en: {
@@ -1212,7 +1161,7 @@ const worksConfig = {
     }
   };
 
-  const portfolioVideos = window.portfolioVideos || [];
+  const portfolioVideos = [];
 
   let currentLang = localStorage.getItem('portfolioLang') || 'en';
 
@@ -1276,69 +1225,75 @@ const worksConfig = {
   }
 
   /* ---- Global Video Control & Lightbox Modal ---- */
-  function pauseAllVideos(){
-    document.querySelectorAll('.works-frame iframe, .video-modal-body iframe').forEach(iframe=>{
-      try{
-        const src = iframe.src;
-        iframe.src = '';
-        iframe.src = src;
-      }catch(e){}
-    });
+  const mediaConfig = window.portfolioMedia || { baseUrl: 'https://pub-b77ce58050dd43119926774391d82e85.r2.dev', sources: {}, posters: {} };
+  function mediaAsset(key){
+    const base = (mediaConfig.baseUrl || '').replace(/\/$/, '');
+    return base ? `${base}/${key}` : `videos/${key}`;
   }
-
+  function mediaSource(item){
+    return mediaConfig.sources?.[item.id] || (item.mediaKey ? mediaAsset(item.mediaKey) : '');
+  }
+  function allWorks(){ return [...worksConfig.motion, ...worksConfig.editing, ...worksConfig.trending]; }
+  function escapeHTML(value){ return String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function videoFrame(item, lang){
+    const title = escapeHTML(lang === 'ar' ? (item.title_ar || item.title) : item.title);
+    const source = mediaSource(item);
+    if(source){
+      const posterUrl = item.posterKey ? mediaAsset(item.posterKey) : (mediaConfig.posters?.[item.id] || '');
+      const poster = posterUrl ? `poster="${escapeHTML(posterUrl)}"` : '';
+      return `<video controls playsinline preload="none" ${poster} aria-label="${title}" src="${escapeHTML(source)}"></video>`;
+    }
+    // A lightweight poster replaces dozens of Drive iframe players on page load.
+    const prompt = lang === 'ar' ? 'شغّل الفيديو' : 'Play video';
+    return `<button class="work-play" data-drive-id="${escapeHTML(item.id)}" aria-label="${prompt}: ${title}" style="background-image:url('https://drive.google.com/thumbnail?id=${encodeURIComponent(item.id)}&sz=w640')"><span class="work-play-icon" aria-hidden="true">▶</span><span class="work-play-label">${prompt}</span></button>`;
+  }
+  function pauseAllVideos(){
+    document.querySelectorAll('video').forEach(video => video.pause());
+    document.querySelectorAll('.works-frame iframe, .video-modal-body iframe').forEach(iframe => { const src = iframe.src; iframe.src = ''; iframe.src = src; });
+  }
   window.togglePauseCardVideo = function(catVidKey){
     const frame = document.getElementById('frame-' + catVidKey);
     if(!frame) return;
+    const video = frame.querySelector('video');
+    if(video) video.pause();
     const iframe = frame.querySelector('iframe');
-    if(iframe){
-      try{
-        const src = iframe.src;
-        iframe.src = '';
-        iframe.src = src;
-      }catch(e){}
-    }
+    if(iframe){ const item = allWorks().find(item => catVidKey.endsWith(item.id)); if(item) frame.innerHTML = videoFrame(item, currentLang); }
   };
-
+  let modalOpener = null;
   window.openVideoModal = function(vid, lang){
+    modalOpener = document.activeElement;
     pauseAllVideos();
+    const item = allWorks().find(item => item.id === vid);
     const modal = document.getElementById('video-modal');
-    const modalTitle = document.getElementById('videoModalTitle');
     const modalBody = document.getElementById('videoModalBody');
-    const closeModalText = document.getElementById('closeModalText');
-    if(!modal || !modalBody) return;
-
-    if(modalTitle) modalTitle.textContent = lang === 'ar' ? 'معاينة الفيديو' : 'Video Preview';
-    if(closeModalText) closeModalText.textContent = lang === 'ar' ? 'إيقاف وإغلاق' : 'Pause & Close';
-
-    modalBody.innerHTML = '';
-    const video = document.createElement('video');
-    video.controls = true;
-    video.autoplay = true;
-    video.setAttribute('playsinline', 'true');
-    video.setAttribute('webkit-playsinline', 'true');
-    video.src = `https://drive.google.com/uc?export=download&id=${vid}`;
-
-    video.onerror = function(){
-      modalBody.innerHTML = `
-        <div class="iframe-safe-wrapper">
-          <div class="iframe-top-blocker"></div>
-          <iframe src="https://drive.google.com/file/d/${vid}/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>
-        </div>`;
-    };
-
-    modalBody.appendChild(video);
-    modal.classList.add('active');
-    modal.setAttribute('aria-hidden', 'false');
+    if(!item || !modal || !modalBody) return;
+    document.getElementById('videoModalTitle').textContent = lang === 'ar' ? (item.title_ar || item.title) : item.title;
+    document.getElementById('closeModalText').textContent = lang === 'ar' ? 'إيقاف وإغلاق' : 'Pause & Close';
+    modalBody.innerHTML = mediaSource(item) ? videoFrame(item, lang) : `<div class="iframe-safe-wrapper"><iframe src="https://drive.google.com/file/d/${encodeURIComponent(item.id)}/preview" title="${escapeHTML(lang === 'ar' ? item.title_ar || item.title : item.title)}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>`;
+    modal.classList.add('active'); modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    modal.querySelector('#closeVideoModalBtn')?.focus();
+    const video = modalBody.querySelector('video');
+    if(video) video.play().catch(() => {});
   };
-
+  document.addEventListener('click', event => {
+    const button = event.target.closest('[data-drive-id]');
+    if(button) window.openVideoModal(button.dataset.driveId, currentLang);
+  });
+  document.addEventListener('play', event => {
+    if(event.target.tagName === 'VIDEO') document.querySelectorAll('video').forEach(video => { if(video !== event.target) video.pause(); });
+  }, true);
   window.closeVideoModal = function(){
     const modal = document.getElementById('video-modal');
     const modalBody = document.getElementById('videoModalBody');
     if(modal){
       modal.classList.remove('active');
       modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      modalOpener?.focus();
     }
     if(modalBody){
+      modalBody.querySelectorAll('video').forEach(video => video.pause());
       modalBody.innerHTML = '';
     }
   };
@@ -1348,7 +1303,14 @@ const worksConfig = {
     if(e.target.id === 'video-modal') window.closeVideoModal();
   });
   document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape') window.closeVideoModal();
+    const modal = document.getElementById('video-modal');
+    if(e.key === 'Escape' && modal.classList.contains('active')) window.closeVideoModal();
+    if(e.key === 'Tab' && modal.classList.contains('active')){
+      const items = Array.from(modal.querySelectorAll('button, video, iframe, [tabindex]')).filter(el => !el.disabled);
+      const first = items[0], last = items[items.length - 1];
+      if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last?.focus(); }
+      else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first?.focus(); }
+    }
   });
 
   /* ---- Works Render — embeds Google Drive player safely ---- */
@@ -1370,15 +1332,12 @@ const worksConfig = {
           return `
           <article class="works-card reveal">
             <div class="works-frame" id="frame-${catVidKey}">
-              <div class="iframe-safe-wrapper">
-                <div class="iframe-top-blocker"></div>
-                <iframe src="https://drive.google.com/file/d/${v.id}/preview" loading="lazy" allowfullscreen allow="autoplay"></iframe>
-              </div>
+              ${videoFrame(v, lang)}
             </div>
             <div class="works-info">
               <div class="works-info-text">
-                <h3>${lang === 'ar' ? (v.title_ar || v.title || '') : (v.title || '')}</h3>
-                <span class="works-tag">${tagLabel}</span>
+                <h3>${escapeHTML(lang === 'ar' ? (v.title_ar || v.title || '') : (v.title || ''))}</h3>
+                <span class="works-tag">${tagLabel}${v.fresh ? (lang === 'ar' ? ' · جديد' : ' · NEW') : ''}</span>
               </div>
               <div class="works-actions">
                 <button class="btn-pause-inline" onclick="togglePauseCardVideo('${catVidKey}')" title="${pauseBtnText}">
@@ -1418,6 +1377,7 @@ const worksConfig = {
       document.getElementById('trending').style.display = 'none';
       return;
     }
+    document.getElementById('trending').style.display = '';
     grid.innerHTML = items.map(v=>{
       const catVidKey = `trending-${v.id}`;
       const pauseBtnText = lang === 'ar' ? 'إيقاف' : 'Pause';
@@ -1427,10 +1387,7 @@ const worksConfig = {
       return `
       <article class="trending-card reveal">
         <div class="works-frame" id="frame-${catVidKey}">
-          <div class="iframe-safe-wrapper">
-            <div class="iframe-top-blocker"></div>
-            <iframe src="https://drive.google.com/file/d/${v.id}/preview" loading="lazy" allowfullscreen allow="autoplay"></iframe>
-          </div>
+          ${videoFrame(v, lang)}
         </div>
         <div class="trending-stats-overlay">
           <span class="stat-pill views">
@@ -1438,19 +1395,19 @@ const worksConfig = {
               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
               <circle cx="12" cy="12" r="3"></circle>
             </svg>
-            ${viewsText}
+            ${escapeHTML(viewsText)}
           </span>
           <span class="stat-pill likes">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
             </svg>
-            ${likesText}
+            ${escapeHTML(likesText)}
           </span>
         </div>
         <div class="works-info">
           <div class="works-info-text">
-            <h3>${lang === 'ar' ? (v.title_ar || v.title || '') : (v.title || '')}</h3>
-            <span class="works-tag" style="color:var(--orange)">🔥 ${v.tag || 'VIRAL'}</span>
+            <h3>${escapeHTML(lang === 'ar' ? (v.title_ar || v.title || '') : (v.title || ''))}</h3>
+            <span class="works-tag" style="color:var(--orange)">🔥 ${escapeHTML(v.tag || 'VIRAL')}</span>
           </div>
           <div class="works-actions">
             <button class="btn-pause-inline" onclick="togglePauseCardVideo('${catVidKey}')" title="${pauseBtnText}">
@@ -1505,7 +1462,7 @@ const worksConfig = {
         frame.appendChild(iframe);
       }else{
         const player = document.createElement('video');
-        player.src = video.src;
+        player.src = mediaConfig.localSources?.[video.src] || video.src;
         if(video.poster) player.poster = video.poster;
         player.controls = true;
         player.preload = 'metadata';
@@ -1603,6 +1560,24 @@ const worksConfig = {
     setLang(currentLang === 'en' ? 'ar' : 'en');
   });
   setLang(currentLang);
+  async function refreshCatalog(){
+    try {
+      const response = await fetch(mediaAsset('catalog.json') + '?t=' + Date.now(), {cache:'no-store'});
+      if(!response.ok) throw new Error('Catalog unavailable');
+      const catalog = await response.json();
+      if(catalog.schemaVersion !== 1 || !Array.isArray(catalog.projects)) throw new Error('Invalid catalog');
+      const safe = catalog.projects.filter(p => p && p.published === true && !p.archived
+        && /^[a-zA-Z0-9_-]{1,100}$/.test(p.id)
+        && ['motion','editing','trending'].includes(p.category)
+        && /^(brand|legacy|uploads)\/[a-zA-Z0-9_./-]+\.(mp4|webm|mov)$/i.test(p.mediaKey)
+        && !p.mediaKey.includes('..')
+        && (!p.posterKey || (/^posters\/[a-zA-Z0-9_.-]+\.(jpg|jpeg|png|webp)$/i.test(p.posterKey)))
+        && typeof p.title === 'string');
+      for(const category of ['motion','editing','trending']) worksConfig[category] = safe.filter(p => p.category === category).sort((a,b)=>(a.order||0)-(b.order||0));
+      renderWorks(currentLang);
+    } catch(error){ console.info('Using saved portfolio catalog.'); }
+  }
+  refreshCatalog();
 
   /* ---- Scroll / Scrubber ---- */
   function frameToTC(scrollFraction){
